@@ -6,6 +6,8 @@ import javax.media.opengl.*;
 import java.io.*;
 import java.util.*;
 
+import static org.lwjgl.opengl.GL11.*;
+
 
 public class Model {
 
@@ -40,10 +42,6 @@ public class Model {
 		this.startAngle = objectAngle;
 		this.isStationary = true;
 	}
-
-//	public void setIsCar(boolean isCar) {
-//		this.isCar = isCar;
-//	}
 
 	public float getObjectAngle() {
 		return this.objectAngle;
@@ -97,10 +95,8 @@ public class Model {
 		return v;
 	}
 
-	public void render(GLAutoDrawable drawable) {
-		GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
-
-		gl.glBegin(GL.GL_TRIANGLES);
+	public void render() {
+		glBegin(GL.GL_TRIANGLES);
 		for (Face f : faces) {
 			Vector3f v1 = verts.get((int) f.verts.x - 1);
 			Vector3f n1 = norms.get((int) f.norms.x - 1);
@@ -126,33 +122,33 @@ public class Model {
 				vt4 = vts.get((int) f.vt.getW() - 1);
 			}
 
-			gl.glTexCoord2d(vt1.getX(), vt1.getY());
+			glTexCoord2d(vt1.getX(), vt1.getY());
 			n1 = transform(n1);
-			gl.glNormal3d(n1.x, n1.y, n1.z);
+			glNormal3d(n1.x, n1.y, n1.z);
 			v1 = transform(v1);
-			gl.glVertex3d(v1.x, v1.y, v1.z);
+			glVertex3d(v1.x, v1.y, v1.z);
 
-			gl.glTexCoord2d(vt2.getX(), vt2.getY());
+			glTexCoord2d(vt2.getX(), vt2.getY());
 			n2 = transform(n2);
-			gl.glNormal3d(n2.x, n2.y, n2.z);
+			glNormal3d(n2.x, n2.y, n2.z);
 			v2 = transform(v2);
-			gl.glVertex3d(v2.x, v2.y, v2.z);
+			glVertex3d(v2.x, v2.y, v2.z);
 
-			gl.glTexCoord2d(vt3.getX(), vt3.getY());
+			glTexCoord2d(vt3.getX(), vt3.getY());
 			n3 = transform(n3);
-			gl.glNormal3d(n3.x, n3.y, n3.z);
+			glNormal3d(n3.x, n3.y, n3.z);
 			v3 = transform(v3);
-			gl.glVertex3d(v3.x, v3.y, v3.z);
+			glVertex3d(v3.x, v3.y, v3.z);
 
 			if(v4 != null && n4 != null) {
-				gl.glTexCoord2d(vt4.getX(), vt4.getY());
+				glTexCoord2d(vt4.getX(), vt4.getY());
 			n4 = transform(n4);
-				gl.glNormal3d(n4.x, n4.y, n4.z);
+				glNormal3d(n4.x, n4.y, n4.z);
 			v4 = transform(v4);
-				gl.glVertex3d(v4.x, v4.y, v4.z);
+				glVertex3d(v4.x, v4.y, v4.z);
 			}
 		}
-		gl.glEnd();
+		glEnd();
 	}
 
 	private Vector3f transform(Vector3f v) {
