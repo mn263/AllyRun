@@ -58,7 +58,7 @@ public class ModelLoader {
 					m.vts.add(v);
 				}
 			} catch (Exception e) {
-			System.out.println("face failed");
+//			System.out.println("face failed");
 //			e.printStackTrace();
 		}
 		}
