@@ -1,4 +1,4 @@
-package sample;
+package com.modelUtils;
 
 import org.lwjgl.util.vector.*;
 

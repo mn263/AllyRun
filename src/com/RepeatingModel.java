@@ -1,5 +1,6 @@
-package sample;
+package com;
 
+import com.renderUtils.*;
 import org.lwjgl.util.vector.*;
 
 import javax.media.opengl.*;

@@ -1,4 +1,4 @@
-package sample;
+package com.renderUtils;
 
 
 import org.lwjgl.util.vector.*;

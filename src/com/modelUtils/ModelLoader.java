@@ -1,5 +1,6 @@
-package sample;
+package com.modelUtils;
 
+import com.*;
 import org.lwjgl.util.vector.*;
 
 import java.io.*;

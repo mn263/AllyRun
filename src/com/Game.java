@@ -1,4 +1,4 @@
-package sample;
+package com;
 
 import org.lwjgl.*;
 import org.lwjgl.input.*;
@@ -109,7 +109,7 @@ public class Game {
 		glLoadIdentity();             // reset projection matrix
 		org.lwjgl.util.glu.GLU.gluPerspective(45.0f, aspect, 0.1f, 400.0f); // fovy, aspect, zNear, zFar
 
-		// Enable the model-view transform
+		// Enable the modelUtils-view transform
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity(); // reset
 	}
@@ -118,7 +118,7 @@ public class Game {
 		boolean hasDisplayed = false;
 		while (!Display.isCloseRequested()) {
 			Game.gameTime -= 0.1;
-			GL11.glTranslatef(0, 0, 0.01f);
+			GL11.glTranslatef(0, 0, 0.05f);
 			if (hasDisplayed) getInput();
 			else hasDisplayed = true;
 
@@ -134,34 +134,20 @@ public class Game {
 	private void doAnyModelUpdating() {
 		//Render
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-//		System.out.println(gameTime);
 		if (gameTime >= -2.2) {
 			shipTexture.bind();
 			ship.render(true);
 
 			bridgeTexture.bind();
-			drawNeverEndingBridge(true);
+			bridge.render(true);
 		} else {
 			shipTexture.bind();
 			ship.render(false);
 
 			bridgeTexture.bind();
-			drawNeverEndingBridge(false);
+			bridge.render(false);
 		}
 	}
-
-	private void drawNeverEndingBridge(boolean recalculate) {
-		Vector3f oldTran = bridge.getTranslate();
-		float x = oldTran.getX();
-		float y = oldTran.getY();
-		float z = -2;
-//		for (int i = 0; i < 10; i++) {
-//			bridge.setTranslate(x, y, z - (5 * i));
-//			System.out.println(z - (5 * i));
-			bridge.render(recalculate);
-//		}
-	}
-
 
 	public void getInput() {
 
