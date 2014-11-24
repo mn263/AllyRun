@@ -16,35 +16,23 @@ import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
-	private static String TITLE = "Ally Run!";
-	private static final int FRAMERATE = 6;
+	private static String TITLE = "Pier Run!";
+	private static final int FRAMERATE = 60;
 	private static final int CANVAS_WIDTH = 800;  // width of the drawable
 	private static final int CANVAS_HEIGHT = 600; // height of the drawable
 
 	private static ArrayList<Model> models = new ArrayList<>();
 	private static ArrayList<Model> carParts = new ArrayList<>();
 
-//	private Model tireOne;
-//	private Model tireTwo;
-//	private Model tireThree;
-//	private Model tireFour;
-//	private Model car;
+	public static float gameTime = -2.0f;
+
 	private Model ship;
-	private Model bridge;
-	private Model bridge2;
-	private Model bridge3;
-	private Model bridge4;
-//	private Model parkingLot;
-//	private Texture tireTexture;
-//	private Texture carTexture;
+	private RepeatingModel bridge;
 	private Texture shipTexture;
 	private Texture bridgeTexture;
-	private Texture parkingLotTexture;
 
 
 
@@ -70,6 +58,7 @@ public class Game {
 
 		reshape(CANVAS_WIDTH, CANVAS_HEIGHT);
 
+//		gluLookAt();
 		display();
 	}
 
@@ -77,72 +66,21 @@ public class Game {
 	private void loadModels() {
 
 //		LOAD TEXTURES FIRST
-//		tireTexture = loadTexture("JPG", "tire.jpg");
-//		carTexture = loadTexture("JPG", "car.jpg");
 		shipTexture = loadTexture("JPG", "sh3.jpg");
 		bridgeTexture = loadTexture("JPG", "trench.jpg");
-//		shipTexture = loadTexture("PNG", "boxandcrayon.png");
-//		parkingLotTexture = loadTexture("JPG", "ParkingLot.jpg");
-
 
 //		LOAD OJB's
 		String objPath = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
-//		tireOne = Model.getModel(objPath + "tire.obj", new Vector3f(0f, 0f, 0f), new Vector3f(1.0f, 1.0f, 1.0f), new Vector3f(-2.2f, 0.5f, -17.6f));
-//		models.add(tireOne);
-//		carParts.add(tireOne);
-//		tireOne.setFrontTire(90f);
-
-//		tireTwo = Model.getModel(objPath + "tire.obj", new Vector3f(0f, 0f, 0f), new Vector3f(1.0f, 1.0f, 1.0f), new Vector3f(-2.2f, 0.5f, -14.4f));
-//		models.add(tireTwo);
-//		carParts.add(tireTwo);
-//		tireTwo.setFrontTire(-90f);
-
-//		tireThree = Model.getModel(objPath + "tire.obj", new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), new Vector3f(1.9f, 0.5f, -17.6f));
-//		models.add(tireThree);
-//		carParts.add(tireThree);
-//		tireThree.setIsStationary(90f);
-
-//		tireFour = Model.getModel(objPath + "tire.obj", new Vector3f(0f, 0f, 0f), new Vector3f(1f, 1f, 1f), new Vector3f(1.9f, 0.5f, -14.4f));
-//		models.add(tireFour);
-//		carParts.add(tireFour);
-//		tireFour.setIsStationary(-90f);
-
-//		car = Model.getModel(objPath + "car.obj", new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
-//		models.add(car);
-//		carParts.add(car);
-//		car.setIsStationary(90f);
-
-//		ship = Model.getModel(objPath + "texturized.obj",
 		ship = Model.getModel(objPath + "Ship.obj",
 				new Vector3f(3.0f, 3.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
 		models.add(ship);
 		carParts.add(ship);
 
-		bridge = Model.getModel(objPath + "trench.obj",
+		bridge = (RepeatingModel) RepeatingModel.getModel(objPath + "trench.obj",
 				new Vector3f(0.0f, 4.0f, -2.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
 		models.add(bridge);
 		bridge.setIsStationary(90f);
-
-		bridge2 = Model.getModel(objPath + "trench.obj",
-				new Vector3f(0.0f, 4.0f, -7.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
-		models.add(bridge2);
-		bridge2.setIsStationary(90f);
-
-		bridge3 = Model.getModel(objPath + "trench.obj",
-				new Vector3f(0.0f, 4.0f, -12.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
-		models.add(bridge3);
-		bridge3.setIsStationary(90f);
-
-		bridge4 = Model.getModel(objPath + "trench.obj",
-				new Vector3f(0.0f, 4.0f, -17.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
-		models.add(bridge4);
-		bridge4.setIsStationary(90f);
-
-
-//		parkingLot = Model.getModel("/home/matt/Programming/Java/CS455/ParkingLot.obj",
-//				new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(7f, 7f, 7f), new Vector3f(6.7f, 0f, 2.4f));
-//		models.add(parkingLot);
-//		parkingLot.setIsStationary(35f);
+		carParts.add(bridge);
 
 		for (Model model : models) {
 			model.updateTranslate(new Vector3f(0.0f, -5f, 0f));
@@ -179,28 +117,49 @@ public class Game {
 	private void display() {
 		boolean hasDisplayed = false;
 		while (!Display.isCloseRequested()) {
+			Game.gameTime -= 0.1;
+			GL11.glTranslatef(0, 0, 0.01f);
 			if (hasDisplayed) getInput();
 			else hasDisplayed = true;
 
-			//Render
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-//
-			shipTexture.bind();
-			ship.render();
-
-			bridgeTexture.bind();
-			bridge.render();
-			bridge2.render();
-			bridge3.render();
-			bridge4.render();
+			doAnyModelUpdating();
 
 			Display.update();
 			Display.sync(FRAMERATE);
 		}
 
 		Display.destroy();
+	}
+
+	private void doAnyModelUpdating() {
+		//Render
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//		System.out.println(gameTime);
+		if (gameTime >= -2.2) {
+			shipTexture.bind();
+			ship.render(true);
+
+			bridgeTexture.bind();
+			drawNeverEndingBridge(true);
+		} else {
+			shipTexture.bind();
+			ship.render(false);
+
+			bridgeTexture.bind();
+			drawNeverEndingBridge(false);
+		}
+	}
+
+	private void drawNeverEndingBridge(boolean recalculate) {
+		Vector3f oldTran = bridge.getTranslate();
+		float x = oldTran.getX();
+		float y = oldTran.getY();
+		float z = -2;
+//		for (int i = 0; i < 10; i++) {
+//			bridge.setTranslate(x, y, z - (5 * i));
+//			System.out.println(z - (5 * i));
+			bridge.render(recalculate);
+//		}
 	}
 
 

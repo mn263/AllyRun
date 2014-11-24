@@ -1,6 +1,7 @@
 package sample;
 
 import org.lwjgl.util.vector.*;
+import org.lwjgl.util.vector.Vector2f;
 
 import javax.media.opengl.*;
 import java.io.*;
@@ -11,16 +12,17 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Model {
 
+	protected ArrayList<RenderData> renderDataList = null;
+
 	public Vector3f distFromOrigin = new Vector3f(0.0f, 0.0f, 0.0f);
 	private Vector3f translate, scale;
 	public List<Vector2f> vts;
 	public List<Vector3f> verts;
 	public List<Vector3f> norms;
 	public List<Face> faces;
-	private float vAngle, hAngle, objectAngle, startAngle;
+	private float vAngle, hAngle, objectAngle;
 	private boolean isFrontTire = false;
 	private boolean isStationary = false;
-//	private boolean isCar = false;
 
 
 	public static Model getModel(String s, Vector3f translate, Vector3f scale, Vector3f distFromOrigin) {
@@ -32,19 +34,9 @@ public class Model {
 		return null;
 	}
 
-	public void setFrontTire(float objectAngle) {
-		this.objectAngle = objectAngle;
-		this.startAngle = objectAngle;
-		isFrontTire = true;
-	}
 	public void setIsStationary(float objectAngle) {
 		this.objectAngle = objectAngle;
-		this.startAngle = objectAngle;
 		this.isStationary = true;
-	}
-
-	public float getObjectAngle() {
-		return this.objectAngle;
 	}
 
 	public Model(String path, Vector3f translate, Vector3f scale, Vector3f distFromOrigin) throws IOException {
@@ -66,6 +58,16 @@ public class Model {
 	public void updateTranslate(Vector3f newT) {
 		this.translate = new Vector3f(translate.getX() + newT.getX(), translate.getY() + newT.getY(), translate.getZ() + newT.getZ());
 	}
+
+	public Vector3f getTranslate() {
+		return translate;
+	}
+
+	public void setTranslate(float x, float y, float z) {
+		this.translate = new Vector3f(x, y, z);
+	}
+
+
 	public void updateVerticalRotate(float angleChange) {
 		this.vAngle += angleChange;
 	}
@@ -95,9 +97,32 @@ public class Model {
 		return v;
 	}
 
-	public void render() {
+	public void render(boolean updateData) {
 		glBegin(GL.GL_TRIANGLES);
+		if (this.renderDataList == null || updateData) updateRenderData();
+		for (RenderData renderData : renderDataList) {
+			displayRenderData(0, renderData);
+			displayRenderData(1, renderData);
+			displayRenderData(2, renderData);
+		}
+		glEnd();
+	}
+
+	protected void displayRenderData(int i, RenderData renderData) {
+		Vector2f t = renderData.texCoords.get(i);
+		glTexCoord2d(t.getX(), t.getY());
+
+		Vector3f n = renderData.normalCoords.get(i);
+		glNormal3d(n.getX(), n.getY(), n.getZ());
+
+		Vector3f v = renderData.vertexCoords.get(i);
+		glVertex3d(v.getX(), v.getY(), v.getZ());
+	}
+
+	protected void updateRenderData() {
+		renderDataList = new ArrayList<>();
 		for (Face f : faces) {
+			RenderData renderData = new RenderData();
 			Vector3f v1 = verts.get((int) f.verts.x - 1);
 			Vector3f n1 = norms.get((int) f.norms.x - 1);
 
@@ -107,51 +132,42 @@ public class Model {
 			Vector3f v3 = verts.get((int) f.verts.z - 1);
 			Vector3f n3 = norms.get((int) f.norms.z - 1);
 
-			Vector3f v4 = null;
-			Vector3f n4 = null;
-			if (f.verts.w != 0) {
-				v4 = verts.get((int) f.verts.w - 1);
-				n4 = norms.get((int) f.norms.w - 1);
-			}
-
 			Vector2f vt1 = vts.get((int) f.vt.getX() - 1);
 			Vector2f vt2 = vts.get((int) f.vt.getY() - 1);
 			Vector2f vt3 = vts.get((int) f.vt.getZ() - 1);
-			Vector2f vt4 = null;
-			if (v4 != null && n4 != null) {
-				vt4 = vts.get((int) f.vt.getW() - 1);
-			}
 
-			glTexCoord2d(vt1.getX(), vt1.getY());
+			renderData.texCoords.add(vt1);
+
 			n1 = transform(n1);
-			glNormal3d(n1.x, n1.y, n1.z);
+			renderData.normalCoords.add(n1);
+
 			v1 = transform(v1);
-			glVertex3d(v1.x, v1.y, v1.z);
+			renderData.vertexCoords.add(v1);
 
-			glTexCoord2d(vt2.getX(), vt2.getY());
+
+			renderData.texCoords.add(vt2);
+
 			n2 = transform(n2);
-			glNormal3d(n2.x, n2.y, n2.z);
+			renderData.normalCoords.add(n2);
+
+
 			v2 = transform(v2);
-			glVertex3d(v2.x, v2.y, v2.z);
+			renderData.vertexCoords.add(v2);
 
-			glTexCoord2d(vt3.getX(), vt3.getY());
+			renderData.texCoords.add(vt3);
+
 			n3 = transform(n3);
-			glNormal3d(n3.x, n3.y, n3.z);
-			v3 = transform(v3);
-			glVertex3d(v3.x, v3.y, v3.z);
+			renderData.normalCoords.add(n3);
 
-			if(v4 != null && n4 != null) {
-				glTexCoord2d(vt4.getX(), vt4.getY());
-			n4 = transform(n4);
-				glNormal3d(n4.x, n4.y, n4.z);
-			v4 = transform(v4);
-				glVertex3d(v4.x, v4.y, v4.z);
-			}
+
+			v3 = transform(v3);
+			renderData.vertexCoords.add(v3);
+
+			renderDataList.add(renderData);
 		}
-		glEnd();
 	}
 
-	private Vector3f transform(Vector3f v) {
+	protected Vector3f transform(Vector3f v) {
 		if (this.isFrontTire) {
 			v = vRotate(v, objectAngle);
 		}
@@ -164,52 +180,5 @@ public class Model {
 		v = hRotate(v, hAngle);
 		v = translate(v, this.translate);
 		return v;
-	}
-
-	public Vector3f driveForward(float degrees, String direction, Vector3f fakeDistFromOrigin) {
-		objectAngle += degrees;
-		Vector3f fakeDistFromOrigin2;
-		if (direction.isEmpty()) {
-			fakeDistFromOrigin = new Vector3f(0, 0, 0);
-			fakeDistFromOrigin2 = vRotate(new Vector3f(-.5f, 0, 0), objectAngle - startAngle);
-		} else if (direction.equals("right")) {
-			fakeDistFromOrigin = vRotate(fakeDistFromOrigin, objectAngle - startAngle);
-			fakeDistFromOrigin2 = vRotate(fakeDistFromOrigin, degrees);
-		} else {
-			fakeDistFromOrigin.z = fakeDistFromOrigin.z * (-1);
-			fakeDistFromOrigin = vRotate(fakeDistFromOrigin, objectAngle - startAngle);
-			fakeDistFromOrigin2 = vRotate(fakeDistFromOrigin, degrees);
-		}
-		distFromOrigin.setX(distFromOrigin.x + fakeDistFromOrigin2.x - fakeDistFromOrigin.x);
-		distFromOrigin.setZ(distFromOrigin.z + fakeDistFromOrigin2.z - fakeDistFromOrigin.z);
-		return distFromOrigin;
-	}
-
-	public void driveTire(float degrees, float direction, Vector3f fakeDistFromOrigin, Vector3f distFromCar) {
-		Vector3f adjustedDistanceFromCar = vRotate(distFromCar, direction);
-		distFromOrigin.x = fakeDistFromOrigin.x * 4 - adjustedDistanceFromCar.x;
-		distFromOrigin.z = fakeDistFromOrigin.z * 4 - adjustedDistanceFromCar.z;
-
-		objectAngle += degrees;
-	}
-
-	public Vector3f driveReverse(float degrees, String direction, Vector3f fakeDistFromOrigin) {
-		objectAngle += degrees;
-		Vector3f fakeDistFromOrigin2;
-
-		if (direction.isEmpty()) {
-			fakeDistFromOrigin = new Vector3f(0, 0, 0);
-			fakeDistFromOrigin2 = vRotate(new Vector3f(0.5f, 0, 0), objectAngle - startAngle);
-		} else if (direction.equals("right")) {
-			fakeDistFromOrigin = vRotate(fakeDistFromOrigin, objectAngle - startAngle);
-			fakeDistFromOrigin2 = vRotate(fakeDistFromOrigin, degrees);
-		} else {
-			fakeDistFromOrigin.z = fakeDistFromOrigin.z*(-1);
-			fakeDistFromOrigin = vRotate(fakeDistFromOrigin, objectAngle - startAngle);
-			fakeDistFromOrigin2 = vRotate(fakeDistFromOrigin, degrees);
-		}
-		distFromOrigin.setX(distFromOrigin.x + fakeDistFromOrigin2.x - fakeDistFromOrigin.x);
-		distFromOrigin.setZ(distFromOrigin.z + fakeDistFromOrigin2.z - fakeDistFromOrigin.z);
-		return distFromOrigin;
 	}
 }
