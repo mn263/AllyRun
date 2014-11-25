@@ -32,17 +32,18 @@ public class Game {
 
 	private Model ship;
 	private RepeatingModel bridge;
+	private RepeatingModel ocean;
 	private Texture shipTexture;
 	private Texture bridgeTexture;
-
+	private Texture oceanTexture;
 
 
 	public Game() {
-		try{
-			Display.setDisplayMode(new DisplayMode(CANVAS_WIDTH,CANVAS_HEIGHT));
+		try {
+			Display.setDisplayMode(new DisplayMode(CANVAS_WIDTH, CANVAS_HEIGHT));
 			Display.setTitle(TITLE);
 			Display.create();
-		} catch(LWJGLException e){
+		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
 
@@ -69,6 +70,7 @@ public class Game {
 //		LOAD TEXTURES FIRST
 		shipTexture = loadTexture("JPG", "sh3.jpg");
 		bridgeTexture = loadTexture("JPG", "pier.jpg");
+		oceanTexture = loadTexture("JPG", "ocean.jpg");
 
 //		LOAD OJB's
 		String objPath = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
@@ -82,6 +84,13 @@ public class Game {
 		models.add(bridge);
 		bridge.setIsStationary(90f);
 		carParts.add(bridge);
+
+		ocean = (RepeatingModel) RepeatingModel.getModel(objPath + "ocean.obj",
+				new Vector3f(0.0f, -7.0f, -2.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -20f));
+		models.add(ocean);
+		ocean.setIsStationary(90f);
+		carParts.add(ocean);
+
 
 		for (Model model : models) {
 			model.updateTranslate(new Vector3f(0.0f, -5f, 0f));
@@ -100,7 +109,7 @@ public class Game {
 
 	public void reshape(int width, int height) {
 		if (height == 0) height = 1;   // prevent divide by zero
-		float aspect = (float)width / height;
+		float aspect = (float) width / height;
 
 		// Set the view port (display area) to cover the entire window
 		glViewport(0, 0, width, height);
@@ -122,6 +131,8 @@ public class Game {
 //			System.out.println("Press Space Bar");
 //		}
 
+		initialModelLoad();
+
 		while (!Display.isCloseRequested()) {
 			Game.gameTime += GAME_SPEED;
 			GL11.glTranslatef(0, 0, GAME_SPEED);
@@ -134,6 +145,18 @@ public class Game {
 		}
 
 		Display.destroy();
+	}
+
+	private void initialModelLoad() {
+//		TODO: find a way to make the background above use an image of the sky that never changes.
+		shipTexture.bind();
+		ship.render(true);
+
+		bridgeTexture.bind();
+		bridge.render(10, 5, true);
+
+		oceanTexture.bind();
+		ocean.render(2, 100, true);
 	}
 
 	private void doAnyModelUpdating() {
@@ -166,9 +189,12 @@ public class Game {
 		//Render
 		shipTexture.bind();
 		ship.render(false);
-
+//
 		bridgeTexture.bind();
-		bridge.render(false);
+		bridge.render(10, 5, false);
+
+		oceanTexture.bind();
+		ocean.render(2, 80, false);
 	}
 
 	public void checkForInput() {

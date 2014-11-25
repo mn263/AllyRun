@@ -26,7 +26,7 @@ public class RepeatingModel extends Model {
 		return null;
 	}
 
-	public void render(boolean updateData) {
+	public void render(int repeatNumber, float distance, boolean updateData) {
 		if (this.renderDataList == null || updateData) {
 			// load all of the data and add to list
 			bridgeInstances = new ArrayList<>();
@@ -34,8 +34,8 @@ public class RepeatingModel extends Model {
 			float x = oldTran.getX();
 			float y = oldTran.getY();
 			float z = -2;
-			for (int i = 0; i < 10; i++) {
-				setTranslate(x, y, z - (5 * i));
+			for (int i = 0; i < repeatNumber; i++) {
+				setTranslate(x, y, z - (distance * i));
 				super.render(updateData);
 				bridgeInstances.add(renderDataList);
 			}
