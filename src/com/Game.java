@@ -20,6 +20,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
 	private static String TITLE = "Pier Run!";
+	private static float GAME_SPEED = 0.05f;
 	private static final int FRAMERATE = 60;
 	private static final int CANVAS_WIDTH = 800;  // width of the drawable
 	private static final int CANVAS_HEIGHT = 600; // height of the drawable
@@ -27,7 +28,7 @@ public class Game {
 	private static ArrayList<Model> models = new ArrayList<>();
 	private static ArrayList<Model> carParts = new ArrayList<>();
 
-	public static float gameTime = -2.0f;
+	public static int gameTime = 0;
 
 	private Model ship;
 	private RepeatingModel bridge;
@@ -67,7 +68,7 @@ public class Game {
 
 //		LOAD TEXTURES FIRST
 		shipTexture = loadTexture("JPG", "sh3.jpg");
-		bridgeTexture = loadTexture("JPG", "trench.jpg");
+		bridgeTexture = loadTexture("JPG", "pier.jpg");
 
 //		LOAD OJB's
 		String objPath = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
@@ -76,7 +77,7 @@ public class Game {
 		models.add(ship);
 		carParts.add(ship);
 
-		bridge = (RepeatingModel) RepeatingModel.getModel(objPath + "trench.obj",
+		bridge = (RepeatingModel) RepeatingModel.getModel(objPath + "pier.obj",
 				new Vector3f(0.0f, 4.0f, -2.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
 		models.add(bridge);
 		bridge.setIsStationary(90f);
@@ -115,12 +116,16 @@ public class Game {
 	}
 
 	private void display() {
-		boolean hasDisplayed = false;
+//		TODO: display loading message when appropriate
+//		TODO: when done loading display "press spacebar" message
+//		while (!Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+//			System.out.println("Press Space Bar");
+//		}
+
 		while (!Display.isCloseRequested()) {
-			Game.gameTime -= 0.1;
-			GL11.glTranslatef(0, 0, 0.05f);
-			if (hasDisplayed) getInput();
-			else hasDisplayed = true;
+			Game.gameTime += GAME_SPEED;
+			GL11.glTranslatef(0, 0, GAME_SPEED);
+			checkForInput();
 
 			doAnyModelUpdating();
 
@@ -132,155 +137,53 @@ public class Game {
 	}
 
 	private void doAnyModelUpdating() {
-		//Render
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		if (gameTime >= -2.2) {
-			shipTexture.bind();
-			ship.render(true);
 
-			bridgeTexture.bind();
-			bridge.render(true);
-		} else {
-			shipTexture.bind();
-			ship.render(false);
-
-			bridgeTexture.bind();
-			bridge.render(false);
+		if (InputTracker.viewChanged()) {
+			// TODO: handle view changing
+			InputTracker.changeView();
+			System.out.println("view changing");
 		}
+		if (InputTracker.moveLeft()) {
+			// TODO: handle moving left
+			System.out.println("moving left");
+		}
+		if (InputTracker.moveRight()) {
+			// TODO: handle moving right
+			System.out.println("moving right");
+		}
+		if (InputTracker.duck()) {
+			// TODO: handle ducking
+			System.out.println("ducking");
+		}
+		if (InputTracker.jump()) {
+//			TODO: handle jumping
+			System.out.println("jumped");
+			InputTracker.upReleased(); // They can't just jump off of the air
+		}
+
+
+		//Render
+		shipTexture.bind();
+		ship.render(false);
+
+		bridgeTexture.bind();
+		bridge.render(false);
 	}
 
-	public void getInput() {
-
-		if (Mouse.isButtonDown(0)) {
-			int x = Mouse.getX();
-			int y = Mouse.getY();
-
-			System.out.println("MOUSE DOWN @ X: " + x + " Y: " + y);
-		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			System.out.println("SPACE KEY IS DOWN");
-		}
-
+	public void checkForInput() {
 		while (Keyboard.next()) {
 			if (Keyboard.getEventKeyState()) {
-				if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-					System.out.println("A Key Pressed");
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_F) {
-					for (Model model : models) {
-						model.updateTranslate(new Vector3f(-1f, 0f, 0f));
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_S) {
-					for (Model model : models) {
-						model.updateTranslate(new Vector3f(1f, 0f, 0f));
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_E) {
-					for (Model model : models) {
-						model.updateTranslate(new Vector3f(0.0f, -1f, 0f));
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_D) {
-					for (Model model : models) {
-						model.updateTranslate(new Vector3f(0f, 1f, 0f));
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_Q) {
-					for (Model model : models) {
-						model.updateTranslate(new Vector3f(0f, 0f, 2f));
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-					for (Model model : models) {
-						model.updateTranslate(new Vector3f(0.0f, 0f, -2f));
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_6) {
-					for (Model model : models) {
-						model.updateTireRotation(-5f);
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_4) {
-					for (Model model : models) {
-						model.updateTireRotation(5f);
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_T) {
-					for (Model model : models) {
-						model.updateHorizontalRotate(-5f);
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_G) {
-					for (Model model : models) {
-						model.updateHorizontalRotate(5f);
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_R) {
-					for (Model model : models) {
-						model.updateVerticalRotate(5f);
-					}
-				}
-				if (Keyboard.getEventKey() == Keyboard.KEY_W) {
-					for (Model model : models) {
-						model.updateVerticalRotate(-5f);
-					}
-				}
-
-				if (Keyboard.getEventKey() == Keyboard.KEY_9 || Keyboard.getEventKey() == Keyboard.KEY_8 ||
-						Keyboard.getEventKey() == Keyboard.KEY_7 || Keyboard.getEventKey() == Keyboard.KEY_3 ||
-						Keyboard.getEventKey() == Keyboard.KEY_2 || Keyboard.getEventKey() == Keyboard.KEY_1) {
-
-//					Vector3f cV = new Vector3f(0, 0, 4);
-//					Vector3f tireV = null;
-//					float degrees = 5;
-//					if (Keyboard.getEventKey() == Keyboard.KEY_9) {
-//						degrees = degrees*(-1);
-//						tireV = car.driveForward(degrees, "right", cV);
-//					} else if (Keyboard.getEventKey() == Keyboard.KEY_3) {
-//						tireV = car.driveReverse(degrees, "right", cV);
-//					} else if (Keyboard.getEventKey() == Keyboard.KEY_7) {
-//						tireV = car.driveForward(degrees, "left", cV);
-//					} else if (Keyboard.getEventKey() == Keyboard.KEY_1) {
-//						degrees = degrees*(-1);
-//						tireV = car.driveReverse(degrees, "left", cV);
-//					} else if (Keyboard.getEventKey() == Keyboard.KEY_8) {
-//						float angleDiff = tireOne.getObjectAngle() - car.getObjectAngle();
-//						int cutoff = 9;
-//						if (Math.abs(angleDiff) < cutoff) {
-//							degrees = 0;
-//							tireV = car.driveForward(degrees, "", null);
-//						} else if (angleDiff > cutoff) {
-//							tireV = car.driveForward(degrees, "left", cV);
-//						} else if (angleDiff < cutoff) {
-//							degrees = degrees*(-1);
-//							tireV = car.driveForward(degrees, "right", cV);
-//						}
-//					} else if (Keyboard.getEventKey() == Keyboard.KEY_2) {
-//						float angleDiff = tireOne.getObjectAngle() - car.getObjectAngle();
-//						int cutoff = 10;
-//						if (Math.abs(angleDiff) <= cutoff) {
-//							degrees = 0;
-//							tireV = car.driveReverse(degrees, "", null);
-//						} else if (angleDiff > cutoff) {
-//							degrees = degrees*(-1);
-//							tireV = car.driveReverse(degrees, "left", cV);
-//						} else if (angleDiff < cutoff) {
-//							tireV = car.driveReverse(degrees, "right", cV);
-//						}
-//					}
-//
-//					float objectAngle = car.getObjectAngle();
-//					tireOne.driveTire(degrees, objectAngle, tireV, new Vector3f(-1.6f, 0, 2.2f));
-//					tireTwo.driveTire(degrees, objectAngle, tireV, new Vector3f(1.6f, 0, 2.2f));
-//					tireThree.driveTire(degrees, objectAngle, tireV, new Vector3f(-1.6f, 0, -1.9f));
-//					tireFour.driveTire(degrees, objectAngle, tireV, new Vector3f(1.6f, 0, -1.9f));
-				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD8) InputTracker.upPressed();
+				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD4) InputTracker.leftPressed();
+				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD6) InputTracker.rightPressed();
+				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD5 || Keyboard.getEventKey() == Keyboard.KEY_NUMPAD2) InputTracker.downPressed();
+				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD0) InputTracker.changeView();
 			} else {
-				if (Keyboard.getEventKey() == Keyboard.KEY_A) {
-					System.out.println("A Key Released");
-				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD8) InputTracker.upReleased();
+				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD4) InputTracker.leftReleased();
+				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD6) InputTracker.rightReleased();
+				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD5 || Keyboard.getEventKey() == Keyboard.KEY_NUMPAD2) InputTracker.downReleased();
 			}
 		}
 	}
