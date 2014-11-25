@@ -19,11 +19,14 @@ import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
-	private static String TITLE = "Pier Run!";
-	private static float GAME_SPEED = 0.05f;
+	private static final String TITLE = "Pier Run!";
 	private static final int FRAMERATE = 60;
 	private static final int CANVAS_WIDTH = 800;  // width of the drawable
 	private static final int CANVAS_HEIGHT = 600; // height of the drawable
+//	private static float GAME_SPEED = 0.0f;
+	private static float GAME_SPEED = 0.05f;
+//	private static String LEVEL = "alien_";
+	private static String LEVEL = "";
 
 	private static ArrayList<Model> models = new ArrayList<>();
 	private static ArrayList<Model> carParts = new ArrayList<>();
@@ -31,9 +34,13 @@ public class Game {
 	public static int gameTime = 0;
 
 	private Model ship;
+	private Model sky;
+	private Model you;
 	private RepeatingModel bridge;
 	private RepeatingModel ocean;
 	private Texture shipTexture;
+	private Texture skyTexture;
+	private Texture youTexture;
 	private Texture bridgeTexture;
 	private Texture oceanTexture;
 
@@ -68,33 +75,49 @@ public class Game {
 	private void loadModels() {
 
 //		LOAD TEXTURES FIRST
-		shipTexture = loadTexture("JPG", "sh3.jpg");
-		bridgeTexture = loadTexture("JPG", "pier.jpg");
-		oceanTexture = loadTexture("JPG", "ocean.jpg");
+		shipTexture = loadTexture("JPG", LEVEL + "sh3.jpg");
+//		shipTexture = loadTexture("JPG", LEVEL + "enemy.jpg");
+		youTexture = loadTexture("JPG", LEVEL + "you.jpg");
+		bridgeTexture = loadTexture("JPG", LEVEL + "pier.jpg");
+		oceanTexture = loadTexture("JPG", LEVEL + "ocean.jpg");
+		skyTexture = loadTexture("JPG", LEVEL + "sky.jpg");
 
 //		LOAD OJB's
 		String objPath = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
-		ship = Model.getModel(objPath + "Ship.obj",
-				new Vector3f(3.0f, 3.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
-		models.add(ship);
-		carParts.add(ship);
+//		enemy = Model.getModel(objPath + "enemy.obj",
+//				new Vector3f(3.0f, 0.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
+//		models.add(enemy);
+//		carParts.add(enemy);
+//		enemy.setIsStationary(0f);
+
+//		ship = Model.getModel(objPath + "Ship.obj",
+//				new Vector3f(3.0f, 0.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
+//		models.add(ship);
+//		carParts.add(ship);
+//		ship.setIsStationary(0f);
+
+		you = Model.getModel(objPath + "you.obj",
+				new Vector3f(0.0f, -0.3f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+		models.add(you);
+		carParts.add(you);
+		you.setIsStationary(0f);
 
 		bridge = (RepeatingModel) RepeatingModel.getModel(objPath + "pier.obj",
-				new Vector3f(0.0f, 4.0f, -2.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
+				new Vector3f(0.0f, -1.0f, -2.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
 		models.add(bridge);
 		bridge.setIsStationary(90f);
 		carParts.add(bridge);
 
+		sky = Model.getModel(objPath + "sky.obj",
+				new Vector3f(-5.0f, -15.0f, -2.0f), new Vector3f(4f, 1f, 1f), new Vector3f(-10f, -20f, -20f));
+		models.add(sky);
+		carParts.add(sky);
+
 		ocean = (RepeatingModel) RepeatingModel.getModel(objPath + "ocean.obj",
-				new Vector3f(0.0f, -7.0f, -2.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -20f));
+				new Vector3f(0.0f, -12.0f, -2.0f), new Vector3f(2f, 1f, 1f), new Vector3f(0f, 0f, -20f));
 		models.add(ocean);
 		ocean.setIsStationary(90f);
 		carParts.add(ocean);
-
-
-		for (Model model : models) {
-			model.updateTranslate(new Vector3f(0.0f, -5f, 0f));
-		}
 	}
 
 	private Texture loadTexture(String imgType, String key) {
@@ -136,6 +159,7 @@ public class Game {
 		while (!Display.isCloseRequested()) {
 			Game.gameTime += GAME_SPEED;
 			GL11.glTranslatef(0, 0, GAME_SPEED);
+			you.updateTranslate(new Vector3f(0, 0, -GAME_SPEED));
 			checkForInput();
 
 			doAnyModelUpdating();
@@ -148,15 +172,20 @@ public class Game {
 	}
 
 	private void initialModelLoad() {
-//		TODO: find a way to make the background above use an image of the sky that never changes.
-		shipTexture.bind();
-		ship.render(true);
+//		shipTexture.bind();
+//		ship.render(true);
+
+		youTexture.bind();
+		you.render(true);
 
 		bridgeTexture.bind();
 		bridge.render(10, 5, true);
 
 		oceanTexture.bind();
-		ocean.render(2, 100, true);
+		ocean.render(2, 70, true);
+
+		skyTexture.bind();
+		sky.render(true);
 	}
 
 	private void doAnyModelUpdating() {
@@ -187,18 +216,40 @@ public class Game {
 
 
 		//Render
-		shipTexture.bind();
-		ship.render(false);
+//		shipTexture.bind();
+//		ship.render(false);
+
+		youTexture.bind();
+		you.render(true);
 //
 		bridgeTexture.bind();
 		bridge.render(10, 5, false);
 
 		oceanTexture.bind();
-		ocean.render(2, 80, false);
+		ocean.render(2, 20, false);
+
+		skyTexture.bind();
+		sky.render(false);
 	}
 
 	public void checkForInput() {
 		while (Keyboard.next()) {
+			if (Keyboard.getEventKey() == Keyboard.KEY_F) GL11.glTranslatef(-1, 0, 0);
+			if (Keyboard.getEventKey() == Keyboard.KEY_S) GL11.glTranslatef(1, 0, 0);
+			if (Keyboard.getEventKey() == Keyboard.KEY_E) GL11.glTranslatef(0, -1, 0);
+			if (Keyboard.getEventKey() == Keyboard.KEY_D) GL11.glTranslatef(0, 1, 0);
+			if (Keyboard.getEventKey() == Keyboard.KEY_Q) GL11.glTranslatef(0, 0, 2);
+			if (Keyboard.getEventKey() == Keyboard.KEY_A) GL11.glTranslatef(0, 0, -2);
+
+			if (Keyboard.getEventKey() == Keyboard.KEY_I) GL11.glRotatef(10, -1, 0, 0);
+			if (Keyboard.getEventKey() == Keyboard.KEY_K) GL11.glRotatef(10, 1, 0, 0);
+			if (Keyboard.getEventKey() == Keyboard.KEY_L) GL11.glRotatef(10, 0, 1, 0);
+			if (Keyboard.getEventKey() == Keyboard.KEY_J) GL11.glRotatef(10, 0, -1, 0);
+			if (Keyboard.getEventKey() == Keyboard.KEY_U) GL11.glRotatef(10, 0, 0, 1);
+			if (Keyboard.getEventKey() == Keyboard.KEY_O) GL11.glRotatef(10, 0, 0, -1);
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 			if (Keyboard.getEventKeyState()) {
 				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD8) InputTracker.upPressed();
 				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD4) InputTracker.leftPressed();
