@@ -234,8 +234,14 @@ public class Game {
 
 	public void checkForInput() {
 		while (Keyboard.next()) {
-			if (Keyboard.getEventKey() == Keyboard.KEY_F) GL11.glTranslatef(-1, 0, 0);
-			if (Keyboard.getEventKey() == Keyboard.KEY_S) GL11.glTranslatef(1, 0, 0);
+			if (Keyboard.getEventKey() == Keyboard.KEY_F) {
+				GL11.glTranslatef(-0.03f, 0, 0);
+				you.updateTranslate(new Vector3f(0.03f, 0, 0));
+			}
+			if (Keyboard.getEventKey() == Keyboard.KEY_S){
+				GL11.glTranslatef(0.03f, 0, 0);
+				you.updateTranslate(new Vector3f(-0.03f, 0, 0));
+			}
 			if (Keyboard.getEventKey() == Keyboard.KEY_E) GL11.glTranslatef(0, -1, 0);
 			if (Keyboard.getEventKey() == Keyboard.KEY_D) GL11.glTranslatef(0, 1, 0);
 			if (Keyboard.getEventKey() == Keyboard.KEY_Q) GL11.glTranslatef(0, 0, 2);
