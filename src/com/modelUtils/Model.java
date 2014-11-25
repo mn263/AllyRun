@@ -1,6 +1,5 @@
-package com;
+package com.modelUtils;
 
-import com.modelUtils.*;
 import com.renderUtils.*;
 import org.lwjgl.util.vector.*;
 import org.lwjgl.util.vector.Vector2f;
