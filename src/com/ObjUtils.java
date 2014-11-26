@@ -19,16 +19,22 @@ public class ObjUtils {
 		return ourInstance;
 	}
 
-	private final String OBJ_PATH = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
+	public final String OBJ_PATH = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
 	private StatusUtils status = StatusUtils.getInstance();
 
+	private Score score0, score1, score2, score3;
+
 	public Model sky, you;
-	public DigitModel zero, one, two, three, four, five, six, seven, eight, nine;
 	public RepeatingModel bridge, ocean;
 
 	public Texture blackTexture, redTexture, skyTexture, youTexture, bridgeTexture, oceanTexture;
 
 	public void loadModels(ArrayList<Model> models, ArrayList<Model> carParts) {
+//		LOAD SCORE DIGITS
+		score0 = new Score(0);
+		score1 = new Score(1);
+		score2 = new Score(2);
+		score3 = new Score(3);
 
 //		LOAD TEXTURES FIRST
 		blackTexture = loadTexture("JPG", "black.jpg");
@@ -102,7 +108,7 @@ public class ObjUtils {
 		sky.render(true);
 
 		blackTexture.bind();
-		handleScore(true);
+		handleScore();
 	}
 
 
@@ -122,7 +128,7 @@ public class ObjUtils {
 		sky.render(false);
 
 		blackTexture.bind();
-		handleScore(false);
+		handleScore();
 	}
 
 
@@ -138,9 +144,7 @@ public class ObjUtils {
 		Display.sync(Game.FRAMERATE);
 	}
 
-	//	public void handleScore(int score) {
-	public void handleScore(boolean initialLoad) {
-		if (initialLoad) loadDigits();
+	public void handleScore() {
 
 		String strScore = String.valueOf(status.score);
 		while (strScore.length() < 4) {
@@ -148,58 +152,26 @@ public class ObjUtils {
 		}
 
 		for (int i = 0; i < strScore.length(); i++) {
-			char digit = strScore.charAt(3 - i);
-			switch (digit) {
-				case '0':
-					zero.render(i);
+			String digit = String.valueOf(strScore.charAt(3 - i));
+			switch (i) {
+				case 0: score0.updateValue(Integer.valueOf(digit));
 					break;
-				case '1':
-					one.render(i);
+				case 1: score1.updateValue(Integer.valueOf(digit));
 					break;
-				case '2':
-					two.render(i);
+				case 2: score2.updateValue(Integer.valueOf(digit));
 					break;
-				case '3':
-					three.render(i);
-					break;
-				case '4':
-					four.render(i);
-					break;
-				case '5':
-					five.render(i);
-					break;
-				case '6':
-					six.render(i);
-					break;
-				case '7':
-					seven.render(i);
-					break;
-				case '8':
-					eight.render(i);
-					break;
-				case '9':
-					nine.render(i);
-					break;
-				default:
+				case 3: score3.updateValue(Integer.valueOf(digit));
 					break;
 			}
 		}
 	}
 
-	private void loadDigits() {
-		zero = DigitModel.getModel(OBJ_PATH + "zero.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-		one = DigitModel.getModel(OBJ_PATH + "one.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-		two = DigitModel.getModel(OBJ_PATH + "two.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-		three = DigitModel.getModel(OBJ_PATH + "three.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-		four = DigitModel.getModel(OBJ_PATH + "four.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-		five = DigitModel.getModel(OBJ_PATH + "five.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-		six = DigitModel.getModel(OBJ_PATH + "six.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-		seven = DigitModel.getModel(OBJ_PATH + "seven.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-		eight = DigitModel.getModel(OBJ_PATH + "eight.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-		nine = DigitModel.getModel(OBJ_PATH + "nine.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
-	}
+
 
 	public void moveScoreLocation(float change) {
-		zero.updateTranslate(new Vector3f(0, 0, -change));
+		score0.adjustWithScreen(change);
+		score1.adjustWithScreen(change);
+		score2.adjustWithScreen(change);
+		score3.adjustWithScreen(change);
 	}
 }

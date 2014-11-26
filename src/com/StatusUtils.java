@@ -31,7 +31,12 @@ public class StatusUtils {
 	}
 
 
+	private int distanceScore = 0;
 	private void updateScore() {
+		if(Game.gameTime - distanceScore > 5) {
+			score += 5;
+			distanceScore += 5;
+		}
 //		TODO: Check distance, food eaten, object jumped (all should add points);
 	}
 
@@ -48,6 +53,7 @@ public class StatusUtils {
 		m.you.updateTranslate(new Vector3f(0, 0, Game.gameTime));
 		GL11.glTranslatef(0, 0, -Game.gameTime);
 		Game.gameTime += 0;
+		distanceScore = 0;
 
 //		TODO: Display "Level Passed" display for a second or so
 
