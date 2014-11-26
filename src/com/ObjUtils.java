@@ -20,23 +20,20 @@ public class ObjUtils {
 	}
 
 	private final String OBJ_PATH = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
-	public Model ship;
-	public Model sky;
-	public Model you;
-	public RepeatingModel bridge;
-	public RepeatingModel ocean;
-	public Texture shipTexture;
-	public Texture skyTexture;
-	public Texture youTexture;
-	public Texture bridgeTexture;
-	public Texture oceanTexture;
+	private StatusUtils status = StatusUtils.getInstance();
+
+	public Model sky, you;
+	public DigitModel zero, one, two, three, four, five, six, seven, eight, nine;
+	public RepeatingModel bridge, ocean;
+
+	public Texture blackTexture, redTexture, skyTexture, youTexture, bridgeTexture, oceanTexture;
 
 	public void loadModels(ArrayList<Model> models, ArrayList<Model> carParts) {
 
 //		LOAD TEXTURES FIRST
-		shipTexture = loadTexture("JPG", Game.LEVEL + "sh3.jpg");
-//		shipTexture = loadTexture("JPG", LEVEL + "enemy.jpg");
-		youTexture = loadTexture("JPG", Game.LEVEL + "you.jpg");
+		blackTexture = loadTexture("JPG", "black.jpg");
+		redTexture = loadTexture("JPG", "red.jpg");
+		youTexture = loadTexture("JPG", "you.jpg");
 		bridgeTexture = loadTexture("JPG", Game.LEVEL + "pier.jpg");
 		oceanTexture = loadTexture("JPG", Game.LEVEL + "ocean.jpg");
 		skyTexture = loadTexture("JPG", Game.LEVEL + "sky.jpg");
@@ -91,8 +88,6 @@ public class ObjUtils {
 
 
 	public void initialModelLoad() {
-//		shipTexture.bind();
-//		ship.render(true);
 
 		youTexture.bind();
 		you.render(true);
@@ -105,6 +100,9 @@ public class ObjUtils {
 
 		skyTexture.bind();
 		sky.render(true);
+
+		blackTexture.bind();
+		handleScore(true);
 	}
 
 
@@ -122,17 +120,86 @@ public class ObjUtils {
 
 		skyTexture.bind();
 		sky.render(false);
+
+		blackTexture.bind();
+		handleScore(false);
 	}
 
 
 	public void displayLoadScreen() {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 		Model loading = Model.getModel(OBJ_PATH + "loading.obj",
 				new Vector3f(-14.0f, 0.0f, -20.0f), new Vector3f(0.5f, 0.5f, 0.5f), new Vector3f(0f, 0f, -15f));
 		loading.setIsStationary(90f);
 
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		loading.render(true);
 		Display.update();
 		Display.sync(Game.FRAMERATE);
+	}
+
+	//	public void handleScore(int score) {
+	public void handleScore(boolean initialLoad) {
+		if (initialLoad) loadDigits();
+
+		String strScore = String.valueOf(status.score);
+		while (strScore.length() < 4) {
+			strScore = '0' + strScore;
+		}
+
+		for (int i = 0; i < strScore.length(); i++) {
+			char digit = strScore.charAt(3 - i);
+			switch (digit) {
+				case '0':
+					zero.render(i);
+					break;
+				case '1':
+					one.render(i);
+					break;
+				case '2':
+					two.render(i);
+					break;
+				case '3':
+					three.render(i);
+					break;
+				case '4':
+					four.render(i);
+					break;
+				case '5':
+					five.render(i);
+					break;
+				case '6':
+					six.render(i);
+					break;
+				case '7':
+					seven.render(i);
+					break;
+				case '8':
+					eight.render(i);
+					break;
+				case '9':
+					nine.render(i);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	private void loadDigits() {
+		zero = DigitModel.getModel(OBJ_PATH + "zero.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+		one = DigitModel.getModel(OBJ_PATH + "one.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+		two = DigitModel.getModel(OBJ_PATH + "two.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+		three = DigitModel.getModel(OBJ_PATH + "three.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+		four = DigitModel.getModel(OBJ_PATH + "four.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+		five = DigitModel.getModel(OBJ_PATH + "five.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+		six = DigitModel.getModel(OBJ_PATH + "six.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+		seven = DigitModel.getModel(OBJ_PATH + "seven.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+		eight = DigitModel.getModel(OBJ_PATH + "eight.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+		nine = DigitModel.getModel(OBJ_PATH + "nine.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+	}
+
+	public void moveScoreLocation(float change) {
+		zero.updateTranslate(new Vector3f(0, 0, -change));
 	}
 }

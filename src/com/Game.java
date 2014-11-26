@@ -3,7 +3,6 @@ package com;
 import com.modelUtils.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-import org.lwjgl.util.vector.*;
 
 import java.util.*;
 
@@ -29,8 +28,9 @@ public class Game {
 	private static ArrayList<Model> models = new ArrayList<>();
 	private static ArrayList<Model> carParts = new ArrayList<>();
 
-	public static int gameTime = 0;
+	public static float gameTime = 0;
 	private ObjUtils m;
+	private StatusUtils status;
 
 
 	public Game() {
@@ -57,6 +57,7 @@ public class Game {
 	private void startGame() {
 
 		m = ObjUtils.getInstance();
+		status = StatusUtils.getInstance();
 		m.displayLoadScreen();
 		m.loadModels(models, carParts);
 		display();
@@ -84,14 +85,15 @@ public class Game {
 		m.initialModelLoad();
 
 		while (!Display.isCloseRequested()) {
-//			TODO: add logic for loading
-//			TODO: add logic for collision
+			status.updateStatus(m);
 			Game.gameTime += GAME_SPEED;
-			GL11.glTranslatef(0, 0, GAME_SPEED);
-			m.you.updateTranslate(new Vector3f(0, 0, -GAME_SPEED));
-			InputController.checkForInput();
-
-			m.doAnyModelUpdating();
+			if (Game.gameTime > 47.5) {
+				status.changeLevel(1);
+			} else {
+				status.updateScreenLocation(GAME_SPEED);
+				InputController.checkForInput();
+				m.doAnyModelUpdating();
+			}
 
 			Display.update();
 			Display.sync(FRAMERATE);
@@ -100,8 +102,12 @@ public class Game {
 		Display.destroy();
 	}
 
-
 	public static void main(String[] args) {
 		new Game();
+	}
+
+	public static void endGame() {
+//		TODO: implement this
+		System.out.println("GAME ENDED, DID YOU WIN?");
 	}
 }

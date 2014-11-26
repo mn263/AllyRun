@@ -16,7 +16,8 @@ public class Model {
 	protected ArrayList<RenderData> renderDataList = null;
 
 	public Vector3f distFromOrigin = new Vector3f(0.0f, 0.0f, 0.0f);
-	private Vector3f translate, scale;
+	protected Vector3f translate;
+	private Vector3f scale;
 	public List<Vector2f> vts;
 	public List<Vector3f> verts;
 	public List<Vector3f> norms;
