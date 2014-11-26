@@ -37,12 +37,13 @@ public class ObjUtils {
 		score3 = new Score(3);
 
 //		LOAD TEXTURES FIRST
-		blackTexture = loadTexture("JPG", "black.jpg");
-		redTexture = loadTexture("JPG", "red.jpg");
-		youTexture = loadTexture("JPG", "you.jpg");
-		bridgeTexture = loadTexture("JPG", Game.LEVEL + "pier.jpg");
-		oceanTexture = loadTexture("JPG", Game.LEVEL + "ocean.jpg");
-		skyTexture = loadTexture("JPG", Game.LEVEL + "sky.jpg");
+		blackTexture = loadTexture("JPG", "misc/black.jpg");
+		redTexture = loadTexture("JPG", "misc/red.jpg");
+//		youTexture = loadTexture("JPG", "food/food1.jpg");
+		youTexture = loadTexture("JPG", "character/you.jpg");
+		bridgeTexture = loadTexture("JPG", Game.LEVEL + "scene/pier.jpg");
+		oceanTexture = loadTexture("JPG", Game.LEVEL + "scene/ocean.jpg");
+		skyTexture = loadTexture("JPG", Game.LEVEL + "scene/sky.jpg");
 
 //		LOAD OJB's
 //		enemy = Model.getModel(OBJ_PATH + "enemy.obj",
@@ -51,30 +52,31 @@ public class ObjUtils {
 //		carParts.add(enemy);
 //		enemy.setIsStationary(0f);
 
-//		ship = Model.getModel(OBJ_PATH + "Ship.obj",
-//				new Vector3f(3.0f, 0.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
-//		models.add(ship);
-//		carParts.add(ship);
-//		ship.setIsStationary(0f);
 
-		you = Model.getModel(OBJ_PATH + "you.obj",
+//		you = Model.getModel(OBJ_PATH + "food/food1.obj",
+//				new Vector3f(0.0f, -0.3f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+//		models.add(you);
+//		carParts.add(you);
+//		you.setIsStationary(0f);
+
+		you = Model.getModel(OBJ_PATH + "character/you.obj",
 				new Vector3f(0.0f, -0.3f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
 		models.add(you);
 		carParts.add(you);
 		you.setIsStationary(0f);
 
-		bridge = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "pier.obj",
+		bridge = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "scene/pier.obj",
 				new Vector3f(0.0f, -1.0f, -2.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
 		models.add(bridge);
 		bridge.setIsStationary(90f);
 		carParts.add(bridge);
 
-		sky = Model.getModel(OBJ_PATH + "sky.obj",
+		sky = Model.getModel(OBJ_PATH + "scene/sky.obj",
 				new Vector3f(-5.0f, -15.0f, -2.0f), new Vector3f(4f, 1f, 1f), new Vector3f(-10f, -20f, -20f));
 		models.add(sky);
 		carParts.add(sky);
 
-		ocean = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "ocean.obj",
+		ocean = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "scene/ocean.obj",
 				new Vector3f(0.0f, -12.0f, -2.0f), new Vector3f(2f, 1f, 1f), new Vector3f(0f, 0f, -20f));
 		models.add(ocean);
 		ocean.setIsStationary(90f);
@@ -135,7 +137,7 @@ public class ObjUtils {
 	public void displayLoadScreen() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Model loading = Model.getModel(OBJ_PATH + "loading.obj",
+		Model loading = Model.getModel(OBJ_PATH + "info/loading.obj",
 				new Vector3f(-14.0f, 0.0f, -20.0f), new Vector3f(0.5f, 0.5f, 0.5f), new Vector3f(0f, 0f, -15f));
 		loading.setIsStationary(90f);
 
@@ -165,8 +167,6 @@ public class ObjUtils {
 			}
 		}
 	}
-
-
 
 	public void moveScoreLocation(float change) {
 		score0.adjustWithScreen(change);

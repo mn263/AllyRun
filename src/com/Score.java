@@ -57,52 +57,52 @@ public class Score {
 	private void loadDigit(int digit) {
 		switch (digit) {
 			case 0:
-				zero = DigitModel.getModel(m.OBJ_PATH + "zero.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				zero = DigitModel.getModel(m.OBJ_PATH + "score/zero.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				zero.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				zero.render(true);
 				break;
 			case 1:
-				one = DigitModel.getModel(m.OBJ_PATH + "one.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				one = DigitModel.getModel(m.OBJ_PATH + "score/one.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				one.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				one.render(true);
 				break;
 			case 2:
-				two = DigitModel.getModel(m.OBJ_PATH + "two.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				two = DigitModel.getModel(m.OBJ_PATH + "score/two.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				two.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				two.render(true);
 				break;
 			case 3:
-				three = DigitModel.getModel(m.OBJ_PATH + "three.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				three = DigitModel.getModel(m.OBJ_PATH + "score/three.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				three.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				three.render(true);
 				break;
 			case 4:
-				four = DigitModel.getModel(m.OBJ_PATH + "four.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				four = DigitModel.getModel(m.OBJ_PATH + "score/four.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				four.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				four.render(true);
 				break;
 			case 5:
-				five = DigitModel.getModel(m.OBJ_PATH + "five.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				five = DigitModel.getModel(m.OBJ_PATH + "score/five.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				five.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				five.render(true);
 				break;
 			case 6:
-				six = DigitModel.getModel(m.OBJ_PATH + "six.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				six = DigitModel.getModel(m.OBJ_PATH + "score/six.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				six.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				six.render(true);
 				break;
 			case 7:
-				seven = DigitModel.getModel(m.OBJ_PATH + "seven.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				seven = DigitModel.getModel(m.OBJ_PATH + "score/seven.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				seven.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				seven.render(true);
 				break;
 			case 8:
-				eight = DigitModel.getModel(m.OBJ_PATH + "eight.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				eight = DigitModel.getModel(m.OBJ_PATH + "score/eight.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				eight.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				eight.render(true);
 				break;
 			case 9:
-				nine = DigitModel.getModel(m.OBJ_PATH + "nine.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
+				nine = DigitModel.getModel(m.OBJ_PATH + "score/nine.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
 				nine.updateTranslate(new Vector3f(-(digitIndex * DIGIT_DIST), 0, 0));
 				nine.render(true);
 				break;
