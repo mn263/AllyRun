@@ -1,6 +1,7 @@
 package com.modelUtils;
 
 import com.renderUtils.*;
+import javafx.geometry.*;
 import org.lwjgl.util.vector.*;
 
 import javax.media.opengl.*;
@@ -12,6 +13,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class RepeatingModel extends Model {
 
 	ArrayList<ArrayList<RenderData>> bridgeInstances = null;
+	ArrayList<BoundingBox> boundingBoxes = null;
 
 	public RepeatingModel(String path, Vector3f translate, Vector3f scale, Vector3f distFromOrigin) throws IOException {
 		super(path, translate, scale, distFromOrigin);
@@ -30,6 +32,8 @@ public class RepeatingModel extends Model {
 		if (this.renderDataList == null || updateData) {
 			// load all of the data and add to list
 			bridgeInstances = new ArrayList<>();
+			boundingBoxes = new ArrayList<>();
+
 			Vector3f oldTran = getTranslate();
 			float x = oldTran.getX();
 			float y = oldTran.getY();
@@ -38,6 +42,7 @@ public class RepeatingModel extends Model {
 				setTranslate(x, y, z - (distance * i));
 				super.render(updateData);
 				bridgeInstances.add(renderDataList);
+				boundingBoxes.add(boundingBox);
 			}
 		} else { // simply display
 			glBegin(GL.GL_TRIANGLES);
@@ -50,5 +55,12 @@ public class RepeatingModel extends Model {
 			}
 			glEnd();
 		}
+	}
+
+	public boolean intersects(BoundingBox intersectingBox) {
+		for (BoundingBox box : boundingBoxes) {
+			if (box.intersects(intersectingBox)) return true;
+		}
+		return false;
 	}
 }

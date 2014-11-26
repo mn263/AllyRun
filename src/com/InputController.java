@@ -14,6 +14,8 @@ public class InputController {
 	private static boolean duck = false;
 	private static boolean jump = false;
 
+	public static final float STRAFE_DIFF = 0.03f;
+
 	private static final float DUCK_DIFF = 0.002f;
 	private static boolean duckInProgress = false;
 
@@ -94,12 +96,12 @@ public class InputController {
 			handleJump();
 		}
 		if (right) {
-			GL11.glTranslatef(-0.03f, 0, 0);
-			m.you.updateTranslate(new Vector3f(0.03f, 0, 0));
+			GL11.glTranslatef(-STRAFE_DIFF, 0, 0);
+			m.you.updateTranslate(new Vector3f(STRAFE_DIFF, 0, 0));
 		}
 		if (left) {
-			GL11.glTranslatef(0.03f, 0, 0);
-			m.you.updateTranslate(new Vector3f(-0.03f, 0, 0));
+			GL11.glTranslatef(STRAFE_DIFF, 0, 0);
+			m.you.updateTranslate(new Vector3f(-STRAFE_DIFF, 0, 0));
 		}
 		if (duck) {
 			if (!duckInProgress) {

@@ -1,8 +1,8 @@
 package com.modelUtils;
 
 import com.renderUtils.*;
+import javafx.geometry.*;
 import org.lwjgl.util.vector.*;
-import org.lwjgl.util.vector.Vector2f;
 
 import javax.media.opengl.*;
 import java.io.*;
@@ -14,6 +14,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Model {
 
 	protected ArrayList<RenderData> renderDataList = null;
+	protected BoundingBox boundingBox = null;
 
 	public Vector3f distFromOrigin = new Vector3f(0.0f, 0.0f, 0.0f);
 	protected Vector3f translate;
@@ -23,7 +24,6 @@ public class Model {
 	public List<Vector3f> norms;
 	public List<Face> faces;
 	private float vAngle, hAngle, objectAngle;
-	private boolean isFrontTire = false;
 	private boolean isStationary = false;
 
 
@@ -36,7 +36,7 @@ public class Model {
 		return null;
 	}
 
-	public void setIsStationary(float objectAngle) {
+	public void setNeededRotation(float objectAngle) {
 		this.objectAngle = objectAngle;
 		this.isStationary = true;
 	}
@@ -67,19 +67,6 @@ public class Model {
 
 	public void setTranslate(float x, float y, float z) {
 		this.translate = new Vector3f(x, y, z);
-	}
-
-
-	public void updateVerticalRotate(float angleChange) {
-		this.vAngle += angleChange;
-	}
-	public void updateHorizontalRotate(float angleChange) {
-		this.hAngle += angleChange;
-	}
-	public void updateTireRotation(float angleChange) {
-		if (isFrontTire) {
-			this.objectAngle += angleChange;
-		}
 	}
 
 	private Vector3f translate(Vector3f v, Vector3f t) {
@@ -123,56 +110,68 @@ public class Model {
 
 	protected void updateRenderData() {
 		renderDataList = new ArrayList<>();
+		float minX = 999999999;
+		float minY = 999999999;
+		float minZ = 999999999;
+		float maxX = -99999999;
+		float maxY = -99999999;
+		float maxZ = -99999999;
 		for (Face f : faces) {
 			RenderData renderData = new RenderData();
 			Vector3f v1 = verts.get((int) f.verts.x - 1);
 			Vector3f n1 = norms.get((int) f.norms.x - 1);
-
 			Vector3f v2 = verts.get((int) f.verts.y - 1);
 			Vector3f n2 = norms.get((int) f.norms.y - 1);
-
 			Vector3f v3 = verts.get((int) f.verts.z - 1);
 			Vector3f n3 = norms.get((int) f.norms.z - 1);
-
 			Vector2f vt1 = vts.get((int) f.vt.getX() - 1);
 			Vector2f vt2 = vts.get((int) f.vt.getY() - 1);
 			Vector2f vt3 = vts.get((int) f.vt.getZ() - 1);
 
 			renderData.texCoords.add(vt1);
-
 			n1 = transform(n1);
 			renderData.normalCoords.add(n1);
-
 			v1 = transform(v1);
 			renderData.vertexCoords.add(v1);
 
-
 			renderData.texCoords.add(vt2);
-
 			n2 = transform(n2);
 			renderData.normalCoords.add(n2);
-
-
 			v2 = transform(v2);
 			renderData.vertexCoords.add(v2);
 
 			renderData.texCoords.add(vt3);
-
 			n3 = transform(n3);
 			renderData.normalCoords.add(n3);
-
-
 			v3 = transform(v3);
 			renderData.vertexCoords.add(v3);
 
 			renderDataList.add(renderData);
+
+			if(v1.x < minX) minX = v1.x;
+			if(v1.y < minY) minY = v1.y;
+			if(v1.z < minZ) minZ = v1.z;
+			if(v2.x < minX) minX = v2.x;
+			if(v2.y < minY) minY = v2.y;
+			if(v2.z < minZ) minZ = v2.z;
+			if(v3.x < minX) minX = v3.x;
+			if(v3.y < minY) minY = v3.y;
+			if(v3.z < minZ) minZ = v3.z;
+
+			if(v1.x > maxX) maxX = v1.x;
+			if(v1.y > maxY) maxY = v1.y;
+			if(v1.z > maxZ) maxZ = v1.z;
+			if(v2.x > maxX) maxX = v2.x;
+			if(v2.y > maxY) maxY = v2.y;
+			if(v2.z > maxZ) maxZ = v2.z;
+			if(v3.x > maxX) maxX = v3.x;
+			if(v3.y > maxY) maxY = v3.y;
+			if(v3.z > maxZ) maxZ = v3.z;
 		}
+		this.boundingBox = new BoundingBox(minX, minY, minZ, maxX - minX, maxY - minY, maxZ - minZ);
 	}
 
 	protected Vector3f transform(Vector3f v) {
-		if (this.isFrontTire) {
-			v = vRotate(v, objectAngle);
-		}
 		if (this.isStationary) {
 			v = vRotate(v, objectAngle);
 		}
@@ -182,5 +181,9 @@ public class Model {
 		v = hRotate(v, hAngle);
 		v = translate(v, this.translate);
 		return v;
+	}
+
+	public boolean intersects(BoundingBox intersectingBox) {
+		return (this.boundingBox.intersects(intersectingBox));
 	}
 }

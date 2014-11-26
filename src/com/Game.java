@@ -26,7 +26,6 @@ public class Game {
 	public static String LEVEL = "";
 
 	private static ArrayList<Model> models = new ArrayList<>();
-	private static ArrayList<Model> carParts = new ArrayList<>();
 
 	public static float gameTime = 0;
 	private ObjUtils m;
@@ -59,7 +58,7 @@ public class Game {
 		m = ObjUtils.getInstance();
 		status = StatusUtils.getInstance();
 		m.displayLoadScreen();
-		m.loadModels(models, carParts);
+		m.loadModels(models);
 		display();
 	}
 
@@ -82,7 +81,7 @@ public class Game {
 	}
 
 	private void display() {
-		m.initialModelLoad();
+		m.updateModels(true);
 
 		while (!Display.isCloseRequested()) {
 			status.updateStatus(m);
@@ -92,7 +91,7 @@ public class Game {
 			} else {
 				status.updateScreenLocation(GAME_SPEED);
 				InputController.checkForInput();
-				m.doAnyModelUpdating();
+				m.updateModels(false);
 			}
 
 			Display.update();

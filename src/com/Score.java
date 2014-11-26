@@ -55,6 +55,7 @@ public class Score {
 	}
 
 	private void loadDigit(int digit) {
+//		TODO: fix bug of score running into the background.
 		switch (digit) {
 			case 0:
 				zero = DigitModel.getModel(m.OBJ_PATH + "score/zero.obj", new Vector3f(18.0f, 13.0f, -20.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -15f));
