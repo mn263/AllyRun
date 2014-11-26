@@ -1,6 +1,7 @@
 package sample;
 
 import org.lwjgl.*;
+import org.lwjgl.input.*;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.*;
 import org.newdawn.slick.opengl.*;
@@ -15,6 +16,8 @@ import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
@@ -77,6 +80,7 @@ public class Game {
 		tireTexture = loadTexture("JPG", "tire.jpg");
 		carTexture = loadTexture("JPG", "car.jpg");
 		shipTexture = loadTexture("JPG", "sh3.jpg");
+//		shipTexture = loadTexture("PNG", "boxandcrayon.png");
 		parkingLotTexture = loadTexture("JPG", "ParkingLot.jpg");
 
 
@@ -107,8 +111,9 @@ public class Game {
 		carParts.add(car);
 		car.setIsStationary(90f);
 
-		ship = Model.getModel(objPath + "Sample_Ships.obj",
-				new Vector3f(0.0f, 0.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
+//		ship = Model.getModel(objPath + "texturized.obj",
+		ship = Model.getModel(objPath + "Ship.obj",
+				new Vector3f(3.0f, 3.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
 		models.add(ship);
 		carParts.add(ship);
 
@@ -158,20 +163,20 @@ public class Game {
 			//Render
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			tireTexture.bind();
-			tireOne.render();
-			tireTwo.render();
-			tireThree.render();
-			tireFour.render();
-
-			carTexture.bind();
-			car.render();
+//			tireTexture.bind();
+//			tireOne.render();
+//			tireTwo.render();
+//			tireThree.render();
+//			tireFour.render();
+//
+//			carTexture.bind();
+//			car.render();
 
 			shipTexture.bind();
 			ship.render();
 
-			parkingLotTexture.bind();
-			parkingLot.render();
+//			parkingLotTexture.bind();
+//			parkingLot.render();
 
 			Display.update();
 			Display.sync(FRAMERATE);
@@ -182,121 +187,157 @@ public class Game {
 
 
 	public void getInput() {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		try {
-			String s = br.readLine();
-			if (s.contains("f")) {
-				for (Model model : models) {
-					model.updateTranslate(new Vector3f(-1f, 0f, 0f));
-				}
-			}
-			if (s.contains("s")) {
-				for (Model model : models) {
-					model.updateTranslate(new Vector3f(1f, 0f, 0f));
-				}
-			}
-			if (s.contains("e")) {
-				for (Model model : models) {
-					model.updateTranslate(new Vector3f(0.0f, -1f, 0f));
-				}
-			}
-			if (s.contains("d")) {
-				for (Model model : models) {
-					model.updateTranslate(new Vector3f(0f, 1f, 0f));
-				}
-			}
-			if (s.contains("q")) {
-				for (Model model : models) {
-					model.updateTranslate(new Vector3f(0f, 0f, 2f));
-				}
-			}
-			if (s.contains("a")) {
-				for (Model model : models) {
-					model.updateTranslate(new Vector3f(0.0f, 0f, -2f));
-				}
-			}
-			if (s.contains("6")) {
-				for (Model model : models) {
-					model.updateTireRotation(-5f);
-				}
-			}
-			if (s.contains("4")) {
-				for (Model model : models) {
-					model.updateTireRotation(5f);
-				}
-			}
-			if (s.contains("t")) {
-				for (Model model : models) {
-					model.updateHorizontalRotate(-5f);
-				}
-			}
-			if (s.contains("g")) {
-				for (Model model : models) {
-					model.updateHorizontalRotate(5f);
-				}
-			}
-			if (s.contains("r")) {
-				for (Model model : models) {
-					model.updateVerticalRotate(5f);
-				}
-			}
-			if (s.contains("w")) {
-				for (Model model : models) {
-					model.updateVerticalRotate(-5f);
-				}
-			}
 
-			if (s.contains("9") || s.contains("8") || s.contains("7") ||
-					s.contains("3") || s.contains("2") || s.contains("1")) {
+		if (Mouse.isButtonDown(0)) {
+			int x = Mouse.getX();
+			int y = Mouse.getY();
 
-				Vector3f cV = new Vector3f(0, 0, 4);
-				Vector3f tireV = null;
-				float degrees = 5;
-				if (s.contains("9")) {
-					degrees = degrees*(-1);
-					tireV = car.driveForward(degrees, "right", cV);
-				} else if (s.contains("3")) {
-					tireV = car.driveReverse(degrees, "right", cV);
-				} else if (s.contains("7")) {
-					tireV = car.driveForward(degrees, "left", cV);
-				} else if (s.contains("1")) {
-					degrees = degrees*(-1);
-					tireV = car.driveReverse(degrees, "left", cV);
-				} else if (s.contains("8")) {
-					float angleDiff = tireOne.getObjectAngle() - car.getObjectAngle();
-					int cutoff = 9;
-					if (Math.abs(angleDiff) < cutoff) {
-						degrees = 0;
-						tireV = car.driveForward(degrees, "", null);
-					} else if (angleDiff > cutoff) {
-						tireV = car.driveForward(degrees, "left", cV);
-					} else if (angleDiff < cutoff) {
-						degrees = degrees*(-1);
-						tireV = car.driveForward(degrees, "right", cV);
-					}
-				} else if (s.contains("2")) {
-					float angleDiff = tireOne.getObjectAngle() - car.getObjectAngle();
-					int cutoff = 10;
-					if (Math.abs(angleDiff) <= cutoff) {
-						degrees = 0;
-						tireV = car.driveReverse(degrees, "", null);
-					} else if (angleDiff > cutoff) {
-						degrees = degrees*(-1);
-						tireV = car.driveReverse(degrees, "left", cV);
-					} else if (angleDiff < cutoff) {
-						tireV = car.driveReverse(degrees, "right", cV);
-					}
-				}
-
-				float objectAngle = car.getObjectAngle();
-				tireOne.driveTire(degrees, objectAngle, tireV, new Vector3f(-1.6f, 0, 2.2f));
-				tireTwo.driveTire(degrees, objectAngle, tireV, new Vector3f(1.6f, 0, 2.2f));
-				tireThree.driveTire(degrees, objectAngle, tireV, new Vector3f(-1.6f, 0, -1.9f));
-				tireFour.driveTire(degrees, objectAngle, tireV, new Vector3f(1.6f, 0, -1.9f));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("MOUSE DOWN @ X: " + x + " Y: " + y);
 		}
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+			System.out.println("SPACE KEY IS DOWN");
+		}
+
+		while (Keyboard.next()) {
+			if (Keyboard.getEventKeyState()) {
+				if (Keyboard.getEventKey() == Keyboard.KEY_A) {
+					System.out.println("A Key Pressed");
+				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_S) {
+					System.out.println("S Key Pressed");
+				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_D) {
+					System.out.println("D Key Pressed");
+				}
+			} else {
+				if (Keyboard.getEventKey() == Keyboard.KEY_A) {
+					System.out.println("A Key Released");
+				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_S) {
+					System.out.println("S Key Released");
+				}
+				if (Keyboard.getEventKey() == Keyboard.KEY_D) {
+					System.out.println("D Key Released");
+				}
+			}
+		}
+
+//		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//		try {
+//			String s = br.readLine();
+//			if (s.contains("f")) {
+//				for (Model model : models) {
+//					model.updateTranslate(new Vector3f(-1f, 0f, 0f));
+//				}
+//			}
+//			if (s.contains("s")) {
+//				for (Model model : models) {
+//					model.updateTranslate(new Vector3f(1f, 0f, 0f));
+//				}
+//			}
+//			if (s.contains("e")) {
+//				for (Model model : models) {
+//					model.updateTranslate(new Vector3f(0.0f, -1f, 0f));
+//				}
+//			}
+//			if (s.contains("d")) {
+//				for (Model model : models) {
+//					model.updateTranslate(new Vector3f(0f, 1f, 0f));
+//				}
+//			}
+//			if (s.contains("q")) {
+//				for (Model model : models) {
+//					model.updateTranslate(new Vector3f(0f, 0f, 2f));
+//				}
+//			}
+//			if (s.contains("a")) {
+//				for (Model model : models) {
+//					model.updateTranslate(new Vector3f(0.0f, 0f, -2f));
+//				}
+//			}
+//			if (s.contains("6")) {
+//				for (Model model : models) {
+//					model.updateTireRotation(-5f);
+//				}
+//			}
+//			if (s.contains("4")) {
+//				for (Model model : models) {
+//					model.updateTireRotation(5f);
+//				}
+//			}
+//			if (s.contains("t")) {
+//				for (Model model : models) {
+//					model.updateHorizontalRotate(-5f);
+//				}
+//			}
+//			if (s.contains("g")) {
+//				for (Model model : models) {
+//					model.updateHorizontalRotate(5f);
+//				}
+//			}
+//			if (s.contains("r")) {
+//				for (Model model : models) {
+//					model.updateVerticalRotate(5f);
+//				}
+//			}
+//			if (s.contains("w")) {
+//				for (Model model : models) {
+//					model.updateVerticalRotate(-5f);
+//				}
+//			}
+//
+//			if (s.contains("9") || s.contains("8") || s.contains("7") ||
+//					s.contains("3") || s.contains("2") || s.contains("1")) {
+//
+//				Vector3f cV = new Vector3f(0, 0, 4);
+//				Vector3f tireV = null;
+//				float degrees = 5;
+//				if (s.contains("9")) {
+//					degrees = degrees*(-1);
+//					tireV = car.driveForward(degrees, "right", cV);
+//				} else if (s.contains("3")) {
+//					tireV = car.driveReverse(degrees, "right", cV);
+//				} else if (s.contains("7")) {
+//					tireV = car.driveForward(degrees, "left", cV);
+//				} else if (s.contains("1")) {
+//					degrees = degrees*(-1);
+//					tireV = car.driveReverse(degrees, "left", cV);
+//				} else if (s.contains("8")) {
+//					float angleDiff = tireOne.getObjectAngle() - car.getObjectAngle();
+//					int cutoff = 9;
+//					if (Math.abs(angleDiff) < cutoff) {
+//						degrees = 0;
+//						tireV = car.driveForward(degrees, "", null);
+//					} else if (angleDiff > cutoff) {
+//						tireV = car.driveForward(degrees, "left", cV);
+//					} else if (angleDiff < cutoff) {
+//						degrees = degrees*(-1);
+//						tireV = car.driveForward(degrees, "right", cV);
+//					}
+//				} else if (s.contains("2")) {
+//					float angleDiff = tireOne.getObjectAngle() - car.getObjectAngle();
+//					int cutoff = 10;
+//					if (Math.abs(angleDiff) <= cutoff) {
+//						degrees = 0;
+//						tireV = car.driveReverse(degrees, "", null);
+//					} else if (angleDiff > cutoff) {
+//						degrees = degrees*(-1);
+//						tireV = car.driveReverse(degrees, "left", cV);
+//					} else if (angleDiff < cutoff) {
+//						tireV = car.driveReverse(degrees, "right", cV);
+//					}
+//				}
+//
+//				float objectAngle = car.getObjectAngle();
+//				tireOne.driveTire(degrees, objectAngle, tireV, new Vector3f(-1.6f, 0, 2.2f));
+//				tireTwo.driveTire(degrees, objectAngle, tireV, new Vector3f(1.6f, 0, 2.2f));
+//				tireThree.driveTire(degrees, objectAngle, tireV, new Vector3f(-1.6f, 0, -1.9f));
+//				tireFour.driveTire(degrees, objectAngle, tireV, new Vector3f(1.6f, 0, -1.9f));
+//			}
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 
