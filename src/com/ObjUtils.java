@@ -1,6 +1,7 @@
 package com;
 
 import com.modelUtils.*;
+import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.*;
 import org.newdawn.slick.opengl.*;
 
@@ -18,6 +19,7 @@ public class ObjUtils {
 		return ourInstance;
 	}
 
+	private final String OBJ_PATH = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
 	public Model ship;
 	public Model sky;
 	public Model you;
@@ -40,37 +42,36 @@ public class ObjUtils {
 		skyTexture = loadTexture("JPG", Game.LEVEL + "sky.jpg");
 
 //		LOAD OJB's
-		String objPath = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
-//		enemy = Model.getModel(objPath + "enemy.obj",
+//		enemy = Model.getModel(OBJ_PATH + "enemy.obj",
 //				new Vector3f(3.0f, 0.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
 //		models.add(enemy);
 //		carParts.add(enemy);
 //		enemy.setIsStationary(0f);
 
-//		ship = Model.getModel(objPath + "Ship.obj",
+//		ship = Model.getModel(OBJ_PATH + "Ship.obj",
 //				new Vector3f(3.0f, 0.0f, 0.0f), new Vector3f(4f, 4f, 4f), new Vector3f(0f, 0f, -4f));
 //		models.add(ship);
 //		carParts.add(ship);
 //		ship.setIsStationary(0f);
 
-		you = Model.getModel(objPath + "you.obj",
+		you = Model.getModel(OBJ_PATH + "you.obj",
 				new Vector3f(0.0f, -0.3f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
 		models.add(you);
 		carParts.add(you);
 		you.setIsStationary(0f);
 
-		bridge = (RepeatingModel) RepeatingModel.getModel(objPath + "pier.obj",
+		bridge = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "pier.obj",
 				new Vector3f(0.0f, -1.0f, -2.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
 		models.add(bridge);
 		bridge.setIsStationary(90f);
 		carParts.add(bridge);
 
-		sky = Model.getModel(objPath + "sky.obj",
+		sky = Model.getModel(OBJ_PATH + "sky.obj",
 				new Vector3f(-5.0f, -15.0f, -2.0f), new Vector3f(4f, 1f, 1f), new Vector3f(-10f, -20f, -20f));
 		models.add(sky);
 		carParts.add(sky);
 
-		ocean = (RepeatingModel) RepeatingModel.getModel(objPath + "ocean.obj",
+		ocean = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "ocean.obj",
 				new Vector3f(0.0f, -12.0f, -2.0f), new Vector3f(2f, 1f, 1f), new Vector3f(0f, 0f, -20f));
 		models.add(ocean);
 		ocean.setIsStationary(90f);
@@ -110,37 +111,9 @@ public class ObjUtils {
 	public void doAnyModelUpdating() {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if (InputTracker.viewChanged()) {
-			// TODO: handle view changing
-			InputTracker.changeView();
-			System.out.println("view changing");
-		}
-		if (InputTracker.moveLeft()) {
-			// TODO: handle moving left
-			System.out.println("moving left");
-		}
-		if (InputTracker.moveRight()) {
-			// TODO: handle moving right
-			System.out.println("moving right");
-		}
-		if (InputTracker.duck()) {
-			// TODO: handle ducking
-			System.out.println("ducking");
-		}
-		if (InputTracker.jump()) {
-//			TODO: handle jumping
-			System.out.println("jumped");
-			InputTracker.upReleased(); // They can't just jump off of the air
-		}
-
-
-		//Render
-//		shipTexture.bind();
-//		ship.render(false);
-
 		youTexture.bind();
 		you.render(true);
-//
+
 		bridgeTexture.bind();
 		bridge.render(10, 5, false);
 
@@ -151,4 +124,15 @@ public class ObjUtils {
 		sky.render(false);
 	}
 
+
+	public void displayLoadScreen() {
+		Model loading = Model.getModel(OBJ_PATH + "loading.obj",
+				new Vector3f(-14.0f, 0.0f, -20.0f), new Vector3f(0.5f, 0.5f, 0.5f), new Vector3f(0f, 0f, -15f));
+		loading.setIsStationary(90f);
+
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		loading.render(true);
+		Display.update();
+		Display.sync(Game.FRAMERATE);
+	}
 }

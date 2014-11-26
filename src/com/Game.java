@@ -18,12 +18,12 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
 	public static final String TITLE = "Pier Run!";
-	private static final int FRAMERATE = 60;
-	private static final int CANVAS_WIDTH = 800;  // width of the drawable
-	private static final int CANVAS_HEIGHT = 600; // height of the drawable
+	public static final int FRAMERATE = 60;
+	public static final int CANVAS_WIDTH = 800;  // width of the drawable
+	public static final int CANVAS_HEIGHT = 600; // height of the drawable
 //	private static float GAME_SPEED = 0.0f;
-	private static float GAME_SPEED = 0.05f;
-//	private static String LEVEL = "alien_";
+	public static float GAME_SPEED = 0.05f;
+//	public static String LEVEL = "alien_";
 	public static String LEVEL = "";
 
 	private static ArrayList<Model> models = new ArrayList<>();
@@ -41,9 +41,6 @@ public class Game {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-		m = ObjUtils.getInstance();
-		m.loadModels(models, carParts);
-
 
 		//Initialization code OpenGL
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -52,15 +49,17 @@ public class Game {
 		glDepthFunc(GL_LEQUAL);
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 		glShadeModel(GL_SMOOTH);
-
 		reshape(CANVAS_WIDTH, CANVAS_HEIGHT);
 
-		displayLoadScreen();
-		display();
+		startGame();
 	}
 
-	private void displayLoadScreen() {
+	private void startGame() {
 
+		m = ObjUtils.getInstance();
+		m.displayLoadScreen();
+		m.loadModels(models, carParts);
+		display();
 	}
 
 
@@ -82,19 +81,15 @@ public class Game {
 	}
 
 	private void display() {
-//		TODO: display loading message when appropriate
-//		TODO: when done loading display "press spacebar" message
-//		while (!Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-//			System.out.println("Press Space Bar");
-//		}
-
 		m.initialModelLoad();
 
 		while (!Display.isCloseRequested()) {
+//			TODO: add logic for loading
+//			TODO: add logic for collision
 			Game.gameTime += GAME_SPEED;
 			GL11.glTranslatef(0, 0, GAME_SPEED);
 			m.you.updateTranslate(new Vector3f(0, 0, -GAME_SPEED));
-			InputTracker.checkForInput();
+			InputController.checkForInput();
 
 			m.doAnyModelUpdating();
 
