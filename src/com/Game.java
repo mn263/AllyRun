@@ -13,6 +13,26 @@ import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Game {
+
+
+//	TODO LIST
+//	TODO: move score so that it doesn't disappear
+//	TODO: keep track of highest score so far
+//	TODO: if the ---- score was passed allow for a bonus round
+//	TODO: create info page while loading
+//	TODO: dont start until space bar hit
+//	TODO: allow for pausing by hitting the space bar
+//	TODO: end game if an enemy was run into
+//	TODO: Create game over screen, with play again option
+//	TODO: create bonus round loading screen
+//	TODO: if you are in a jump, don't allow side movement
+
+//	TODO: implement "first-person" view
+
+//	TODO: create a light source and somehow add shading????
+//	TODO: add option for different difficulty levels (score should go up faster with higher difficulty--game_speed, # of enemies)
+
+
 	public static final String TITLE = "Pier Run!";
 	public static final int FRAMERATE = 60;
 	public static final int CANVAS_WIDTH = 800;  // width of the drawable
