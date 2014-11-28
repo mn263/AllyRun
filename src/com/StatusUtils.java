@@ -3,6 +3,8 @@ package com;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.*;
 
+import static java.lang.Math.max;
+
 public class StatusUtils {
 	private static StatusUtils ourInstance = new StatusUtils();
 
@@ -20,7 +22,8 @@ public class StatusUtils {
 		return score;
 	}
 	public void addToScore(int increase) {
-		score += increase;
+		score = max(0, score + increase);
+
 	}
 
 	public void updateStatus(ObjUtils m) {
