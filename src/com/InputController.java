@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.*;
 public class InputController {
 
 	private static ObjUtils m = ObjUtils.getInstance();
+	private static StatusUtils status = StatusUtils.getInstance();
 	private static boolean changeView = false;
 
 	private static boolean left = false;
@@ -71,6 +72,9 @@ public class InputController {
 				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD6) {
 					InputController.rightPressed();
 				} else if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD5 || Keyboard.getEventKey() == Keyboard.KEY_NUMPAD2) {
+					if (!duckInProgress) {
+						checkForFood();
+					}
 					InputController.downPressed();
 				}
 				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD0) {
@@ -88,6 +92,18 @@ public class InputController {
 					}
 				}
 			}
+		}
+	}
+
+	private static void checkForFood() {
+		if (m.food1.intersects(m.you.boundingBox)) {
+			status.addToScore(5);
+		} else if (m.food2.intersects(m.you.boundingBox)) {
+			status.addToScore(10);
+		} else if (m.food3.intersects(m.you.boundingBox)) {
+			status.addToScore(20);
+		} else {
+			status.addToScore(-5);
 		}
 	}
 
@@ -114,7 +130,7 @@ public class InputController {
 	}
 
 
-	private static final float JUMP_SPEED = 0.01f;
+	private static final float JUMP_SPEED = 0.02f;
 	private static int counter;
 	private static void handleJump() {
 		jumpStatus += JUMP_SPEED;
@@ -123,12 +139,17 @@ public class InputController {
 				if (jumpStatus > 0.3) {
 					counter -= 2;
 					jumpStatus += JUMP_SPEED;
-					m.you.updateTranslate(new Vector3f(0, -(JUMP_SPEED * 2), 0));
+					m.you.updateTranslate(new Vector3f(0, -(JUMP_SPEED * 1), 0));
 				} else {
 					counter -= 1;
-					m.you.updateTranslate(new Vector3f(0, -JUMP_SPEED, 0));
+					m.you.updateTranslate(new Vector3f(0, -(JUMP_SPEED * 0.5f), 0));
 				}
 			} else {
+				if(counter < 0) {
+					m.you.updateTranslate(new Vector3f(0, -(counter * JUMP_SPEED * 0.5f), 0));
+					counter = 0;
+				}
+				System.out.println(counter);
 				jumpStatus = 0;
 				jumpInProgress = false;
 				jump = false;
@@ -137,10 +158,10 @@ public class InputController {
 			if (jumpStatus <= 0.1) {
 				counter += 2;
 				jumpStatus += JUMP_SPEED;
-				m.you.updateTranslate(new Vector3f(0, JUMP_SPEED * 2, 0));
+				m.you.updateTranslate(new Vector3f(0, JUMP_SPEED * 1, 0));
 			} else {
 				counter += 1;
-				m.you.updateTranslate(new Vector3f(0, JUMP_SPEED, 0));
+				m.you.updateTranslate(new Vector3f(0, JUMP_SPEED * 0.5f, 0));
 			}
 		}
 	}

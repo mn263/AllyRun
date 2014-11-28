@@ -126,10 +126,12 @@ public class ObjUtils {
 
 	public void handleScore() {
 
-		String strScore = String.valueOf(status.score);
+		String strScore = String.valueOf(status.getScore());
 		while (strScore.length() < 4) {
 			strScore = '0' + strScore;
 		}
+
+		try {
 
 		for (int i = 0; i < strScore.length(); i++) {
 			String digit = String.valueOf(strScore.charAt(3 - i));
@@ -143,6 +145,9 @@ public class ObjUtils {
 				case 3: score3.updateValue(Integer.valueOf(digit));
 					break;
 			}
+		}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 

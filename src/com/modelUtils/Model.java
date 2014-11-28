@@ -14,7 +14,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Model {
 
 	protected ArrayList<RenderData> renderDataList = null;
-	protected BoundingBox boundingBox = null;
+	public BoundingBox boundingBox = null;
 
 	public Vector3f distFromOrigin = new Vector3f(0.0f, 0.0f, 0.0f);
 	protected Vector3f translate;

@@ -12,9 +12,16 @@ public class StatusUtils {
 
 	private ObjUtils m = null;
 
-	public int score = 0;
+	private int score = 0;
 	public int health = 4;
 	private int currentLevel = 0;
+
+	public int getScore() {
+		return score;
+	}
+	public void addToScore(int increase) {
+		score += increase;
+	}
 
 	public void updateStatus(ObjUtils m) {
 		if (this.m == null) this.m = m;
