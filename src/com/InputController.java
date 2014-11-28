@@ -149,7 +149,6 @@ public class InputController {
 					m.you.updateTranslate(new Vector3f(0, -(counter * JUMP_SPEED * 0.5f), 0));
 					counter = 0;
 				}
-				System.out.println(counter);
 				jumpStatus = 0;
 				jumpInProgress = false;
 				jump = false;

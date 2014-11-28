@@ -26,7 +26,6 @@ public class StatusUtils {
 	public void updateStatus(ObjUtils m) {
 		if (this.m == null) this.m = m;
 		updateScore();
-		checkFood();
 		checkCollision();
 	}
 
@@ -51,7 +50,11 @@ public class StatusUtils {
 //		TODO: implement method
 	}
 	private void checkCollision() {
-//		TODO: implement method
+		if (m.enemy1.intersects(m.you.boundingBox)) {
+			System.out.println("You died--endgame screen should appear");
+		} else if (m.enemy2.intersects(m.you.boundingBox)) {
+			System.out.println("You died--endgame screen should appear");
+		}
 	}
 
 	public void changeLevel(int i) {

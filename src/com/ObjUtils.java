@@ -24,9 +24,10 @@ public class ObjUtils {
 	public Model sky, you, mike;
 	public RepeatingModel bridge, ocean;
 	public FoodModel food1, food2, food3;
+	public FoodModel enemy1, enemy2;
 
 	public Texture mikeTexture, blackTexture, redTexture, skyTexture, youTexture, bridgeTexture, oceanTexture,
-			food1Texture, food2Texture, food3Texture;
+			food1Texture, food2Texture, food3Texture, enemy1Texture, enemy2Texture;
 
 	public void loadModels() {
 //		LOAD TEXTURES FIRST
@@ -41,6 +42,9 @@ public class ObjUtils {
 		food1Texture = loadTexture("JPG", "food/food1.jpg");
 		food2Texture = loadTexture("JPG", "food/food2.jpg");
 		food3Texture = loadTexture("JPG", "food/food3.jpg");
+		// enemy
+		enemy1Texture = loadTexture("TGA", "enemy/enemy1.tga");
+		enemy2Texture = loadTexture("JPG", "enemy/enemy2.jpg");
 		// misc
 		blackTexture = loadTexture("JPG", "misc/black.jpg");
 		redTexture = loadTexture("JPG", "misc/red.jpg");
@@ -60,9 +64,14 @@ public class ObjUtils {
 		ocean.setNeededRotation(90f);
 
 //		FOOD
-		food1 = FoodModel.getModel(10, OBJ_PATH + "food/food1.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
-		food2 = FoodModel.getModel(10, OBJ_PATH + "food/food2.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
-		food3 = FoodModel.getModel(10, OBJ_PATH + "food/food3.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+		food1 = FoodModel.getModel(20, OBJ_PATH + "food/food1.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+		food2 = FoodModel.getModel(15, OBJ_PATH + "food/food2.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+		food3 = FoodModel.getModel(5, OBJ_PATH + "food/food3.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+
+//		ENEMY
+		enemy1 = FoodModel.getModel(20, OBJ_PATH + "enemy/enemy1.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+		enemy2 = FoodModel.getModel(15, OBJ_PATH + "enemy/enemy2.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+		enemy2.setNeededRotation(20f);
 
 //		SCORE
 		score0 = new Score(0);
@@ -105,6 +114,11 @@ public class ObjUtils {
 		food2.render();
 		food3Texture.bind();
 		food3.render();
+//		ENEMY
+		enemy1Texture.bind();
+		enemy1.render();
+		enemy2Texture.bind();
+		enemy2.render();
 //		SCORE
 		blackTexture.bind();
 		handleScore();
@@ -131,8 +145,6 @@ public class ObjUtils {
 			strScore = '0' + strScore;
 		}
 
-		try {
-
 		for (int i = 0; i < strScore.length(); i++) {
 			String digit = String.valueOf(strScore.charAt(3 - i));
 			switch (i) {
@@ -145,9 +157,6 @@ public class ObjUtils {
 				case 3: score3.updateValue(Integer.valueOf(digit));
 					break;
 			}
-		}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
