@@ -22,6 +22,7 @@ public class ObjUtils {
 	private Score score0, score1, score2, score3;
 
 	public Model sky, you, mike;
+//	public DigitModel score;
 	public RepeatingModel bridge, ocean;
 	public FoodModel food1, food2, food3;
 	public FoodModel enemy1, enemy2;
@@ -74,6 +75,9 @@ public class ObjUtils {
 		enemy2.setNeededRotation(20f);
 
 //		SCORE
+//		score = DigitModel.getModel(OBJ_PATH + "score/score.obj", new Vector3f(0f, 1.1f, -1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+//		score.render(true);
+
 		score0 = new Score(0);
 		score1 = new Score(1);
 		score2 = new Score(2);
@@ -160,10 +164,12 @@ public class ObjUtils {
 		}
 	}
 
-	public void moveScoreLocation(float change) {
+	public void moveScoreLocation(Vector3f change) {
 		score0.adjustWithScreen(change);
 		score1.adjustWithScreen(change);
 		score2.adjustWithScreen(change);
 		score3.adjustWithScreen(change);
+//		score.updateTranslate(new Vector3f(change.getX() - 0.5f, change.getY(), change.getZ()));
+//		score.render(true);
 	}
 }

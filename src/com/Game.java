@@ -2,6 +2,7 @@ package com;
 
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
+import org.lwjgl.util.vector.*;
 
 import static javax.media.opengl.GL.GL_DEPTH_TEST;
 import static javax.media.opengl.GL.GL_LEQUAL;
@@ -16,7 +17,7 @@ public class Game {
 
 
 //	TODO LIST
-//	TODO: move score so that it doesn't disappear
+//	TODO: add "Score:" to the score display
 //	TODO: keep track of highest score so far
 //	TODO: if the ---- score was passed allow for a bonus round
 //	TODO: create info page while loading
@@ -31,7 +32,7 @@ public class Game {
 
 //	TODO: create a light source and somehow add shading????
 //	TODO: add option for different difficulty levels (score should go up faster with higher difficulty--game_speed, # of enemies)
-
+//  TODO: maybe make the cat move around
 
 	public static final String TITLE = "Pier Run!";
 	public static final int FRAMERATE = 60;
@@ -101,7 +102,7 @@ public class Game {
 			if (Game.gameTime > 47.5) {
 				status.changeLevel(1);
 			} else {
-				status.updateScreenLocation(GAME_SPEED);
+				status.updateScreenLocation(new Vector3f(0, 0, GAME_SPEED));
 				InputController.checkForInput();
 				m.updateModels(false);
 			}

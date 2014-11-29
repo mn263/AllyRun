@@ -48,7 +48,7 @@ public class FoodModel extends Model {
 				Random rn = new Random();
 				float xMovement = rn.nextFloat() * xRange;
 				if(rn.nextBoolean()) xMovement = xMovement * (-1);
-				float zMovement = rn.nextFloat() * 40;
+				float zMovement = rn.nextFloat() * 45;
 
 				setTranslate(x + xMovement, y, z - zMovement);
 				super.render(true); // Food location doesn't move with screen

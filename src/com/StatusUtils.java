@@ -32,11 +32,10 @@ public class StatusUtils {
 		checkCollision();
 	}
 
-	public void updateScreenLocation(float change) {
-		GL11.glTranslatef(0, 0, change);
-		m.you.updateTranslate(new Vector3f(0, 0, -change));
+	public void updateScreenLocation(Vector3f change) {
+		GL11.glTranslatef(change.getX(), change.getY(), change.getZ());
+		m.you.updateTranslate(new Vector3f(-change.getX(), -change.getY(), -change.getZ()));
 		m.moveScoreLocation(change);
-//		TODO: move health with this
 	}
 
 
@@ -46,17 +45,13 @@ public class StatusUtils {
 			score += 5;
 			distanceScore += 5;
 		}
-//		TODO: Check distance, food eaten, object jumped (all should add points);
 	}
 
-	private void checkFood() {
-//		TODO: implement method
-	}
 	private void checkCollision() {
 		if (m.enemy1.intersects(m.you.boundingBox)) {
-			System.out.println("You died--endgame screen should appear");
+			System.out.print("You died--endgame screen should appear");
 		} else if (m.enemy2.intersects(m.you.boundingBox)) {
-			System.out.println("You died--endgame screen should appear");
+			System.out.print("You died--endgame screen should appear");
 		}
 	}
 
