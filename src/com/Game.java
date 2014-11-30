@@ -1,10 +1,7 @@
 package com;
 
-import com.modelUtils.*;
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
-
-import java.util.*;
 
 import static javax.media.opengl.GL.GL_DEPTH_TEST;
 import static javax.media.opengl.GL.GL_LEQUAL;
@@ -20,12 +17,10 @@ public class Game {
 	public static final int FRAMERATE = 60;
 	public static final int CANVAS_WIDTH = 800;  // width of the drawable
 	public static final int CANVAS_HEIGHT = 600; // height of the drawable
-//	private static float GAME_SPEED = 0.0f;
+//	private static float GAME_SPEED = 0.02f;
 	public static float GAME_SPEED = 0.05f;
 //	public static String LEVEL = "alien_";
 	public static String LEVEL = "";
-
-	private static ArrayList<Model> models = new ArrayList<>();
 
 	public static float gameTime = 0;
 	private ObjUtils m;
@@ -58,7 +53,7 @@ public class Game {
 		m = ObjUtils.getInstance();
 		status = StatusUtils.getInstance();
 		m.displayLoadScreen();
-		m.loadModels(models);
+		m.loadModels();
 		display();
 	}
 

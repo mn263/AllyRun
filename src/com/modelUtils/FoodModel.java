@@ -1,6 +1,5 @@
 package com.modelUtils;
 
-import com.*;
 import com.renderUtils.*;
 import javafx.geometry.*;
 import org.lwjgl.util.vector.*;
@@ -9,25 +8,25 @@ import javax.media.opengl.*;
 import java.io.*;
 import java.util.*;
 
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.*;
 
 public class FoodModel extends Model {
 
 	private ArrayList<ArrayList<RenderData>> foodInstances = null;
 	private ArrayList<BoundingBox> boundingBoxes = null;
 	//	TODO: make repeat num based off of the current level
-	private final int repeatNumber = 10;
-	private float xRange = 7 * InputController.STRAFE_DIFF;
+	private int repeatNumber = 10;
+	private float xRange = 0.5f;
 
 
-	public FoodModel(String path, Vector3f translate, Vector3f scale, Vector3f distFromOrigin) throws IOException {
+	public FoodModel(int repeatNumber, String path, Vector3f translate, Vector3f scale, Vector3f distFromOrigin) throws IOException {
 		super(path, translate, scale, distFromOrigin);
+		this.repeatNumber = repeatNumber;
 	}
 
-	public static FoodModel getModel(String s, Vector3f translate, Vector3f scale, Vector3f distFromOrigin) {
+	public static FoodModel getModel(int repeatNumber, String s, Vector3f translate, Vector3f scale, Vector3f distFromOrigin) {
 		try {
-			return new FoodModel(s, translate, scale, distFromOrigin);
+			return new FoodModel(repeatNumber, s, translate, scale, distFromOrigin);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

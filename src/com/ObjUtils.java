@@ -6,11 +6,8 @@ import org.lwjgl.util.vector.*;
 import org.newdawn.slick.opengl.*;
 
 import java.io.*;
-import java.util.*;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.*;
 
 public class ObjUtils {
 	private static ObjUtils ourInstance = new ObjUtils();
@@ -24,26 +21,26 @@ public class ObjUtils {
 
 	private Score score0, score1, score2, score3;
 
-	public Model sky, you;
+	public Model sky, you, mike;
 	public RepeatingModel bridge, ocean;
-	public FoodModel food1, food2, food3, food4, food5;
+	public FoodModel food1, food2, food3;
 
-	public Texture blackTexture, redTexture, skyTexture, youTexture, bridgeTexture, oceanTexture, food1Texture, food2Texture, food3Texture, food4Texture, food5Texture;
+	public Texture mikeTexture, blackTexture, redTexture, skyTexture, youTexture, bridgeTexture, oceanTexture,
+			food1Texture, food2Texture, food3Texture;
 
-	public void loadModels(ArrayList<Model> models) {
+	public void loadModels() {
 //		LOAD TEXTURES FIRST
 		// character
 		youTexture = loadTexture("JPG", "character/you.jpg");
+		mikeTexture = loadTexture("JPG", "character/mike.jpg");
 		// scene
 		bridgeTexture = loadTexture("JPG", Game.LEVEL + "scene/pier.jpg");
 		oceanTexture = loadTexture("JPG", Game.LEVEL + "scene/ocean.jpg");
 		skyTexture = loadTexture("JPG", Game.LEVEL + "scene/sky.jpg");
 		// food
 		food1Texture = loadTexture("JPG", "food/food1.jpg");
-//		food2Texture = loadTexture("JPG", "food/food2.jpg");
-//		food3Texture = loadTexture("JPG", "food/food3.jpg");
-//		food4Texture = loadTexture("JPG", "food/food4.jpg");
-//		food5Texture = loadTexture("JPG", "food/food5.jpg");
+		food2Texture = loadTexture("JPG", "food/food2.jpg");
+		food3Texture = loadTexture("JPG", "food/food3.jpg");
 		// misc
 		blackTexture = loadTexture("JPG", "misc/black.jpg");
 		redTexture = loadTexture("JPG", "misc/red.jpg");
@@ -51,35 +48,21 @@ public class ObjUtils {
 //		CHARACTERS
 		you = Model.getModel(OBJ_PATH + "character/you.obj",
 				new Vector3f(0.0f, -0.3f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
-		models.add(you);
-		you.setNeededRotation(0f);
+		mike = FoodModel.getModel(1, OBJ_PATH + "character/mike.obj",
+				new Vector3f(-0.3f, -0.15f, 1.0f), new Vector3f(4f, 4f, 4f), new Vector3f(1f, 3f, -9f));
+		mike.setNeededRotation(25f);
 
 //		SCENE
-		bridge = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "scene/pier.obj",
-				new Vector3f(0.0f, -1.0f, -2.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
+		bridge = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "scene/pier.obj", new Vector3f(0.0f, -1.0f, -2.0f), new Vector3f(0.01f, 0.01f, 0.01f), new Vector3f(0f, 0f, -20f));
 		bridge.setNeededRotation(90f);
-		models.add(bridge);
-
-		sky = Model.getModel(OBJ_PATH + "scene/sky.obj",
-				new Vector3f(-5.0f, -15.0f, -2.0f), new Vector3f(4f, 1f, 1f), new Vector3f(-10f, -20f, -20f));
-		models.add(sky);
-
-		ocean = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "scene/ocean.obj",
-				new Vector3f(0.0f, -12.0f, -2.0f), new Vector3f(2f, 1f, 1f), new Vector3f(0f, 0f, -20f));
+		sky = Model.getModel(OBJ_PATH + "scene/sky.obj", new Vector3f(-5.0f, -15.0f, -2.0f), new Vector3f(4f, 1f, 1f), new Vector3f(-10f, -20f, -20f));
+		ocean = (RepeatingModel) RepeatingModel.getModel(OBJ_PATH + "scene/ocean.obj", new Vector3f(0.0f, -12.0f, -2.0f), new Vector3f(2f, 1f, 1f), new Vector3f(0f, 0f, -20f));
 		ocean.setNeededRotation(90f);
-		models.add(ocean);
 
 //		FOOD
-		food1 = FoodModel.getModel(OBJ_PATH + "food/food1.obj", new Vector3f(0.0f, -0.2f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
-		models.add(food1);
-//		food1 = FoodModel.getModel(OBJ_PATH + "food/food1.obj", new Vector3f(0.0f, -0.4f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
-//		models.add(food1);
-//		food1 = FoodModel.getModel(OBJ_PATH + "food/food1.obj", new Vector3f(0.0f, -0.4f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
-//		models.add(food1);
-//		food1 = FoodModel.getModel(OBJ_PATH + "food/food1.obj", new Vector3f(0.0f, -0.4f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
-//		models.add(food1);
-//		food1 = FoodModel.getModel(OBJ_PATH + "food/food1.obj", new Vector3f(0.0f, -0.4f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
-//		models.add(food1);
+		food1 = FoodModel.getModel(10, OBJ_PATH + "food/food1.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+		food2 = FoodModel.getModel(10, OBJ_PATH + "food/food2.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+		food3 = FoodModel.getModel(10, OBJ_PATH + "food/food3.obj", new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
 
 //		SCORE
 		score0 = new Score(0);
@@ -106,6 +89,8 @@ public class ObjUtils {
 //		CHARACTERS
 		youTexture.bind();
 		you.render(true);
+		mikeTexture.bind();
+		mike.render(initialLoad);
 //		SCENE
 		bridgeTexture.bind();
 		bridge.render(10, 5, initialLoad);
@@ -116,14 +101,10 @@ public class ObjUtils {
 //		FOOD
 		food1Texture.bind();
 		food1.render();
-//		food1Texture.bind();
-//		food1.render();
-//		food1Texture.bind();
-//		food1.render();
-//		food1Texture.bind();
-//		food1.render();
-//		food1Texture.bind();
-//		food1.render();
+		food2Texture.bind();
+		food2.render();
+		food3Texture.bind();
+		food3.render();
 //		SCORE
 		blackTexture.bind();
 		handleScore();

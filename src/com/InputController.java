@@ -14,7 +14,7 @@ public class InputController {
 	private static boolean duck = false;
 	private static boolean jump = false;
 
-	public static final float STRAFE_DIFF = 0.03f;
+	public static final float STRAFE_DIFF = 0.01f;
 
 	private static final float DUCK_DIFF = 0.002f;
 	private static boolean duckInProgress = false;
