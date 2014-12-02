@@ -17,6 +17,8 @@ public class Game {
 
 
 //	TODO LIST
+//	TODO: running into something while in the air or holding 'strafe' cause bugs
+
 //	TODO: keep track of highest score so far
 //	TODO: if the ---- score was passed allow for a bonus round
 //	TODO: dont start until space bar hit
@@ -36,7 +38,7 @@ public class Game {
 	public static final int FRAMERATE = 60;
 	public static final int CANVAS_WIDTH = 800;  // width of the drawable
 	public static final int CANVAS_HEIGHT = 600; // height of the drawable
-	public static boolean PLAY = false;
+	private static boolean PLAY = false;
 	public static enum GAME_STATUS { newgame, endgame, highscore }
 	public static GAME_STATUS gameStatus = GAME_STATUS.newgame;
 //	public static float GAME_SPEED = 0.05f;
@@ -99,18 +101,20 @@ public class Game {
 
 	private void display() {
 		m.updateModels(true);
-//		PLAY = true;
 		while (!Display.isCloseRequested()) {
-			if (PLAY) Game.gameTime += GAME_SPEED;
-			if (Game.gameTime > 47.5) {
-				endGame();
+			InputController.checkForInput();
+			if (isPlaying()) {
+				Game.gameTime += GAME_SPEED;
+				if (Game.gameTime > 47.5) {
+					endGame();
+				} else {
+					status.updateStatus(m);
+					status.updateScreenLocation(new Vector3f(0, 0, GAME_SPEED));
+					m.updateModels(false);
+				}
 			} else {
-				InputController.checkForInput();
-				if (PLAY) status.updateStatus(m);
-				if (PLAY) status.updateScreenLocation(new Vector3f(0, 0, GAME_SPEED));
-				if (PLAY) m.updateModels(false);
-				if (!PLAY) m.updateModels(true);
-				if (!PLAY) m.displayInfoScreen();
+				m.updateModels(true);
+				m.displayInfoScreen();
 			}
 			Display.update();
 			Display.sync(FRAMERATE);
@@ -119,8 +123,8 @@ public class Game {
 	}
 
 	public void endGame() {
-		if(!PLAY) return;
-		PLAY = false;
+		if(!isPlaying()) return;
+		endPlay();
 
 		if (LEVEL.equals("") && status.getScore() > 500) {
 //			TODO: load bonus level
@@ -137,6 +141,18 @@ public class Game {
 		status.reset();
 	}
 
+	public static void endPlay() {
+		PLAY = false;
+	}
+
+	public static void startPlay() {
+		PLAY = true;
+		Game.gameTime = 0;
+	}
+
+	public static boolean isPlaying() {
+		return PLAY;
+	}
 
 	public static void main(String[] args) {
 		new Game();

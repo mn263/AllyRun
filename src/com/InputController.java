@@ -43,8 +43,9 @@ public class InputController {
 		handleCurrentStatus();
 
 		while (Keyboard.next()) {
-			if (Keyboard.getEventKey() == Keyboard.KEY_SPACE){
-				Game.PLAY = true;
+			if(!Game.isPlaying()) {
+				Game.startPlay();
+				return;
 			}
 			if (Keyboard.getEventKey() == Keyboard.KEY_F) status.moveCamera(new Vector3f(-0.1f, 0, 0));
 			if (Keyboard.getEventKey() == Keyboard.KEY_S) status.moveCamera(new Vector3f(0.1f, 0, 0));

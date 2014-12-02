@@ -22,7 +22,7 @@ public class StatusUtils {
 		return score;
 	}
 	public void addToScore(int increase) {
-		score = max(0, score + increase);
+		setScore(max(0, score + increase));
 	}
 
 	public void setScore(int score) {
@@ -51,13 +51,15 @@ public class StatusUtils {
 	private int distanceScore = 0;
 	private void updateScore() {
 		if(Game.gameTime - distanceScore > 5) {
-			score += 5;
+			setScore(this.score + 5);
 			distanceScore += 5;
 		}
 	}
 
 	private void checkCollision() {
-		if (m.enemy1.intersects(m.you.boundingBox) || m.enemy2.intersects(m.you.boundingBox)) game.endGame();
+		if (m.enemy1.intersects(m.you.boundingBox) || m.enemy2.intersects(m.you.boundingBox)) {
+			game.endGame();
+		}
 	}
 
 

@@ -166,16 +166,13 @@ public class ObjUtils {
 		}
 
 		infoBox.render(true);
-
-//		Display.update();
-//		Display.sync(Game.FRAMERATE);
 	}
 
 	public void loadCharacters() {
 
 //		CHARACTERS
 		you = Model.getModel(OBJ_PATH + "character/you.obj",
-				new Vector3f(0.0f, -0.3f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
+				new Vector3f(0.0f, -0.28f, 1.0f), new Vector3f(1f, 1f, 1f), new Vector3f(0f, 0f, -2f));
 		mike = FoodModel.getModel(1, OBJ_PATH + "character/mike.obj",
 				new Vector3f(-0.3f, -0.15f, 1.0f), new Vector3f(4f, 4f, 4f), new Vector3f(1f, 3f, -9f));
 		mike.setNeededRotation(25f);
