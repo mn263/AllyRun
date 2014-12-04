@@ -73,10 +73,10 @@ public class StatusUtils {
 		totalCameraMovement.setZ(totalCameraMovement.getZ() + translate.getZ());
 	}
 
-	public void reset() {
+	public void reset(ObjUtils m) {
 		GL11.glTranslatef(-totalCameraMovement.getX(), -totalCameraMovement.getY(), -totalCameraMovement.getZ());
 		m.displayInfoScreen();
-		ObjUtils.getInstance().loadCharacters();
+		m.loadCharacters();
 		totalCameraMovement = new Vector3f(0, 0, 0);
 	}
 }

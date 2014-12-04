@@ -19,12 +19,12 @@ public class Score {
 
 	private DigitModel activeDigit;
 
-	public Score(boolean highScore, int digitIndex) {
+	public Score(boolean highScore, int digitIndex, ObjUtils m) {
+		this.m = m;
 		if (highScore) xlocation = -1.0f;
 		else xlocation = 1.4f;
 
 		this.digitIndex = digitIndex;
-		this.m = ObjUtils.getInstance();
 		loadDigit(0);
 		activeDigit = zero;
 	}

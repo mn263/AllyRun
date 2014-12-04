@@ -53,7 +53,7 @@ public class Game {
 	}
 
 	private void startGame() {
-		m = ObjUtils.getInstance();
+		m = new ObjUtils();
 		status = StatusUtils.getInstance();
 		status.game = this;
 		m.displayLoadScreen();
@@ -82,7 +82,7 @@ public class Game {
 	private void display() {
 		m.updateModels(true);
 		while (!Display.isCloseRequested()) {
-			InputController.checkForInput();
+			InputController.checkForInput(m);
 			if (isPlaying()) {
 				Game.gameTime += GAME_SPEED;
 				if (Game.gameTime > 47.5) {
@@ -108,7 +108,7 @@ public class Game {
 
 		if (LEVEL.equals("") && status.getScore() > 150) {
 			gameStatus = GAME_STATUS.bonus;
-			status.reset();
+			status.reset(m);
 			LEVEL = "alien_";
 			GAME_SPEED = GAME_SPEED * 2;
 			m.loadSceneTextures();
@@ -127,7 +127,7 @@ public class Game {
 		}
 		status.setScore(0);
 		GAME_SPEED = GAME_SPEED * 1.3f;
-		status.reset();
+		status.reset(m);
 	}
 
 	public static void endPlay() {

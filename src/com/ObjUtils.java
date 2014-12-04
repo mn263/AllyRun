@@ -10,11 +10,6 @@ import java.io.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class ObjUtils {
-	private static ObjUtils ourInstance = new ObjUtils();
-
-	public static ObjUtils getInstance() {
-		return ourInstance;
-	}
 
 	public final String OBJ_PATH = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
 	private StatusUtils status = StatusUtils.getInstance();
@@ -220,14 +215,14 @@ public class ObjUtils {
 		enemy2.setNeededRotation(20f);
 
 //		SCORE
-		score0 = new Score(false, 0);
-		score1 = new Score(false, 1);
-		score2 = new Score(false, 2);
-		score3 = new Score(false, 3);
-		hScore0 = new Score(true, 0);
-		hScore1 = new Score(true, 1);
-		hScore2 = new Score(true, 2);
-		hScore3 = new Score(true, 3);
+		score0 = new Score(false, 0, this);
+		score1 = new Score(false, 1, this);
+		score2 = new Score(false, 2, this);
+		score3 = new Score(false, 3, this);
+		hScore0 = new Score(true, 0, this);
+		hScore1 = new Score(true, 1, this);
+		hScore2 = new Score(true, 2, this);
+		hScore3 = new Score(true, 3, this);
 
 	}
 }

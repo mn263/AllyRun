@@ -5,7 +5,6 @@ import org.lwjgl.util.vector.*;
 
 public class InputController {
 
-	private static ObjUtils m = ObjUtils.getInstance();
 	private static StatusUtils status = StatusUtils.getInstance();
 	private static boolean changeView = false;
 
@@ -36,11 +35,11 @@ public class InputController {
 	private static void downReleased() { duck = false; }
 
 
-	public static void checkForInput() {
-		ObjUtils m = ObjUtils.getInstance();
+	public static void checkForInput(ObjUtils m) {
+//		ObjUtils m = ObjUtils.getInstance();
 		StatusUtils status = StatusUtils.getInstance();
 
-		handleCurrentStatus();
+		handleCurrentStatus(m);
 
 		while (Keyboard.next()) {
 			if(!Game.isPlaying() &&
@@ -75,7 +74,7 @@ public class InputController {
 					InputController.rightPressed();
 				} else if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD5 || Keyboard.getEventKey() == Keyboard.KEY_NUMPAD2) {
 					if (!duckInProgress) {
-						checkForFood();
+						checkForFood(m);
 					}
 					InputController.downPressed();
 				}
@@ -97,7 +96,7 @@ public class InputController {
 		}
 	}
 
-	private static void checkForFood() {
+	private static void checkForFood(ObjUtils m) {
 		if (m.food1.intersects(m.you.boundingBox)) {
 			if(Game.LEVEL.equals("")) status.addToScore(5);
 			else status.addToScore(1);
@@ -113,9 +112,9 @@ public class InputController {
 		}
 	}
 
-	private static void handleCurrentStatus() {
+	private static void handleCurrentStatus(ObjUtils m) {
 		if (jumpInProgress) {
-			handleJump();
+			handleJump(m);
 		}
 		if (right) {
 			status.updateScreenLocation(new Vector3f(-STRAFE_DIFF, 0, 0));
@@ -135,7 +134,7 @@ public class InputController {
 
 	private static final float JUMP_SPEED = 0.02f;
 	private static int counter;
-	private static void handleJump() {
+	private static void handleJump(ObjUtils m) {
 		jumpStatus += JUMP_SPEED;
 		if (jumpStatus > 0.2) { // Go back down
 			if (jumpStatus < 0.4) {
