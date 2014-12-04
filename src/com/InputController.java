@@ -15,7 +15,7 @@ public class InputController {
 
 	public static final float STRAFE_DIFF = 0.01f;
 
-	private static final float DUCK_DIFF = 0.002f;
+	private static final float DUCK_DIFF = 0.004f;
 	private static boolean duckInProgress = false;
 
 	private static boolean jumpInProgress = false;
@@ -53,12 +53,12 @@ public class InputController {
 				Game.startPlay();
 				return;
 			}
-			if (Keyboard.getEventKey() == Keyboard.KEY_F) status.moveCamera(new Vector3f(-0.1f, 0, 0));
-			if (Keyboard.getEventKey() == Keyboard.KEY_S) status.moveCamera(new Vector3f(0.1f, 0, 0));
-			if (Keyboard.getEventKey() == Keyboard.KEY_E) status.moveCamera(new Vector3f(0, -0.1f, 0));
-			if (Keyboard.getEventKey() == Keyboard.KEY_D) status.moveCamera(new Vector3f(0, 0.1f, 0));
-			if (Keyboard.getEventKey() == Keyboard.KEY_Q) status.moveCamera(new Vector3f(0, 0, 0.2f));
-			if (Keyboard.getEventKey() == Keyboard.KEY_A) status.moveCamera(new Vector3f(0, 0, -0.2f));
+			if (Keyboard.getEventKey() == Keyboard.KEY_F) status.moveCamera(new Vector3f(-0.4f, 0, 0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_S) status.moveCamera(new Vector3f(0.4f, 0, 0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_E) status.moveCamera(new Vector3f(0, -0.4f, 0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_D) status.moveCamera(new Vector3f(0, 0.4f, 0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_Q) status.moveCamera(new Vector3f(0, 0, 0.4f));
+			if (Keyboard.getEventKey() == Keyboard.KEY_A) status.moveCamera(new Vector3f(0, 0, -0.4f));
 
 			if (Keyboard.getEventKeyState()) {
 				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD8) {
@@ -79,8 +79,14 @@ public class InputController {
 					InputController.downPressed();
 				}
 				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD0) {
+					if (changeView) {
+						status.moveCamera(new Vector3f(0f, -0.2f, -0.4f));
+						m.moveScoreLocation(new Vector3f(0f, -0.2f, -0.4f));
+					} else {
+						status.moveCamera(new Vector3f(0f, 0.2f, 0.4f));
+						m.moveScoreLocation(new Vector3f(0f, 0.2f, 0.4f));
+					}
 					InputController.changeView();
-//					TODO: changeView
 				}
 			} else {
 				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD4) InputController.leftReleased();
