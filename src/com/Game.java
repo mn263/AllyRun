@@ -16,7 +16,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class Game {
 
 
-	public static final String TITLE = "Pier Run!";
+	public static final String TITLE = "Pack Rat!";
 	public static final int FRAMERATE = 100;
 	public static final int CANVAS_WIDTH = 800;  // width of the drawable
 	public static final int CANVAS_HEIGHT = 600; // height of the drawable
@@ -106,7 +106,7 @@ public class Game {
 		if(!isPlaying()) return;
 		endPlay();
 
-		if (LEVEL.equals("") && status.getScore() > 100) {
+		if (LEVEL.equals("") && status.getScore() > 150) {
 			gameStatus = GAME_STATUS.bonus;
 			status.reset();
 			LEVEL = "alien_";
@@ -126,6 +126,7 @@ public class Game {
 			}
 		}
 		status.setScore(0);
+		GAME_SPEED = GAME_SPEED * 1.3f;
 		status.reset();
 	}
 

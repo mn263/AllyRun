@@ -14,9 +14,8 @@ public class FoodModel extends Model {
 
 	private ArrayList<ArrayList<RenderData>> foodInstances = null;
 	private ArrayList<BoundingBox> boundingBoxes = null;
-	//	TODO: make repeat num based off of the current level
 	private int repeatNumber = 10;
-	private float xRange = 0.4f;
+	private float xRange = 0.43f;
 
 
 	public FoodModel(int repeatNumber, String path, Vector3f translate, Vector3f scale, Vector3f distFromOrigin) throws IOException {
