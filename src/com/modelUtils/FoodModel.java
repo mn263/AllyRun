@@ -69,6 +69,8 @@ public class FoodModel extends Model {
 	}
 
 	public boolean intersects(BoundingBox intersectingBox) {
+		if (intersectingBox == null) return false;
+
 		for (BoundingBox box : boundingBoxes) {
 			if (box.intersects(intersectingBox)) return true;
 		}

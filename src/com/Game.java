@@ -17,10 +17,8 @@ public class Game {
 
 
 //	TODO LIST
-//	TODO: add "Score:" to the score display
 //	TODO: keep track of highest score so far
 //	TODO: if the ---- score was passed allow for a bonus round
-//	TODO: create info page while loading
 //	TODO: dont start until space bar hit
 //	TODO: allow for pausing by hitting the space bar
 //	TODO: end game if an enemy was run into
@@ -38,7 +36,11 @@ public class Game {
 	public static final int FRAMERATE = 60;
 	public static final int CANVAS_WIDTH = 800;  // width of the drawable
 	public static final int CANVAS_HEIGHT = 600; // height of the drawable
-	public static float GAME_SPEED = 0.05f;
+	public static boolean PLAY = false;
+	public static enum GAME_STATUS { newgame, endgame, highscore }
+	public static GAME_STATUS gameStatus = GAME_STATUS.newgame;
+//	public static float GAME_SPEED = 0.05f;
+	public static float GAME_SPEED = 0.075f;
 //	public static String LEVEL = "alien_";
 	public static String LEVEL = "";
 
@@ -71,6 +73,7 @@ public class Game {
 	private void startGame() {
 		m = ObjUtils.getInstance();
 		status = StatusUtils.getInstance();
+		status.game = this;
 		m.displayLoadScreen();
 		m.loadModels();
 		display();
@@ -96,15 +99,18 @@ public class Game {
 
 	private void display() {
 		m.updateModels(true);
+//		PLAY = true;
 		while (!Display.isCloseRequested()) {
-			status.updateStatus(m);
-			Game.gameTime += GAME_SPEED;
+			if (PLAY) Game.gameTime += GAME_SPEED;
 			if (Game.gameTime > 47.5) {
-				status.changeLevel(1);
+				endGame();
 			} else {
-				status.updateScreenLocation(new Vector3f(0, 0, GAME_SPEED));
 				InputController.checkForInput();
-				m.updateModels(false);
+				if (PLAY) status.updateStatus(m);
+				if (PLAY) status.updateScreenLocation(new Vector3f(0, 0, GAME_SPEED));
+				if (PLAY) m.updateModels(false);
+				if (!PLAY) m.updateModels(true);
+				if (!PLAY) m.displayInfoScreen();
 			}
 			Display.update();
 			Display.sync(FRAMERATE);
@@ -112,12 +118,27 @@ public class Game {
 		Display.destroy();
 	}
 
-	public static void main(String[] args) {
-		new Game();
+	public void endGame() {
+		if(!PLAY) return;
+		PLAY = false;
+
+		if (LEVEL.equals("") && status.getScore() > 500) {
+//			TODO: load bonus level
+		} else {
+			if (status.getScore() > status.getHighScore()) {
+				gameStatus = GAME_STATUS.highscore;
+				status.setHighScore(status.getScore());
+//				TODO: display high score
+			} else {
+				gameStatus = GAME_STATUS.endgame;
+			}
+		}
+		status.setScore(0);
+		status.reset();
 	}
 
-	public static void endGame() {
-//		TODO: implement this
-		System.out.println("GAME ENDED, DID YOU WIN?");
+
+	public static void main(String[] args) {
+		new Game();
 	}
 }

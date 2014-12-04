@@ -3,7 +3,7 @@ package com;
 import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.*;
 
-import static java.lang.Math.max;
+import static java.lang.Math.*;
 
 public class StatusUtils {
 	private static StatusUtils ourInstance = new StatusUtils();
@@ -13,17 +13,26 @@ public class StatusUtils {
 	}
 
 	private ObjUtils m = null;
+	public Game game;
 
+	private int highScore = 0;
 	private int score = 0;
-	public int health = 4;
-	private int currentLevel = 0;
 
 	public int getScore() {
 		return score;
 	}
 	public void addToScore(int increase) {
 		score = max(0, score + increase);
+	}
 
+	public void setScore(int score) {
+		this.score = score;
+	}
+	public void setHighScore(int highScore) {
+		this.highScore = highScore;
+	}
+	public int getHighScore() {
+		return this.highScore;
 	}
 
 	public void updateStatus(ObjUtils m) {
@@ -33,7 +42,7 @@ public class StatusUtils {
 	}
 
 	public void updateScreenLocation(Vector3f change) {
-		GL11.glTranslatef(change.getX(), change.getY(), change.getZ());
+		moveCamera(new Vector3f(change.getX(), change.getY(), change.getZ()));
 		m.you.updateTranslate(new Vector3f(-change.getX(), -change.getY(), -change.getZ()));
 		m.moveScoreLocation(change);
 	}
@@ -48,43 +57,26 @@ public class StatusUtils {
 	}
 
 	private void checkCollision() {
-		if (m.enemy1.intersects(m.you.boundingBox)) {
-			System.out.print("You died--endgame screen should appear");
-		} else if (m.enemy2.intersects(m.you.boundingBox)) {
-			System.out.print("You died--endgame screen should appear");
-		}
-	}
-
-	public void changeLevel(int i) {
-//		i = 1 means level passed, 0 mean start over
-
-		m.you.updateTranslate(new Vector3f(0, 0, Game.gameTime));
-		GL11.glTranslatef(0, 0, -Game.gameTime);
-		Game.gameTime += 0;
-		distanceScore = 0;
-
-//		TODO: Display "Level Passed" display for a second or so
-
-		if (i == 1) {
-			currentLevel += 1;
-		} else {
-			currentLevel = 0;
-		}
-
-		switch (currentLevel) {
-			case 0:
-				Game.LEVEL = "";
-				break;
-			case 1:
-				Game.LEVEL = "alien_";
-				break;
-//			TODO: implement more levels
-//			case 2: Game.LEVEL = "hell_";
-//				break;
-			default:
-				Game.endGame();
-		}
+		if (m.enemy1.intersects(m.you.boundingBox) || m.enemy2.intersects(m.you.boundingBox)) game.endGame();
 	}
 
 
+
+	public Vector3f totalCameraMovement = new Vector3f(0, 0, 0);
+	public void moveCamera(Vector3f translate) {
+		GL11.glTranslatef(translate.getX(), translate.getY(), translate.getZ());
+		totalCameraMovement.setX(totalCameraMovement.getX() + translate.getX());
+		totalCameraMovement.setY(totalCameraMovement.getY() + translate.getY());
+		totalCameraMovement.setZ(totalCameraMovement.getZ() + translate.getZ());
+	}
+
+	public void reset() {
+		GL11.glTranslatef(-totalCameraMovement.getX(), -totalCameraMovement.getY(), -totalCameraMovement.getZ());
+		m.displayInfoScreen();
+
+
+		ObjUtils.getInstance().loadCharacters();
+
+		totalCameraMovement = new Vector3f(0, 0, 0);
+	}
 }

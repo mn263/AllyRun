@@ -1,7 +1,6 @@
 package com;
 
 import org.lwjgl.input.*;
-import org.lwjgl.opengl.*;
 import org.lwjgl.util.vector.*;
 
 public class InputController {
@@ -39,26 +38,21 @@ public class InputController {
 
 	public static void checkForInput() {
 		ObjUtils m = ObjUtils.getInstance();
+		StatusUtils status = StatusUtils.getInstance();
 
 		handleCurrentStatus();
 
 		while (Keyboard.next()) {
-			if (Keyboard.getEventKey() == Keyboard.KEY_F) GL11.glTranslatef(-0.1f, 0, 0);
-			if (Keyboard.getEventKey() == Keyboard.KEY_S) GL11.glTranslatef(0.1f, 0, 0);
-			if (Keyboard.getEventKey() == Keyboard.KEY_E) GL11.glTranslatef(0, -0.1f, 0);
-			if (Keyboard.getEventKey() == Keyboard.KEY_D) GL11.glTranslatef(0, 0.1f, 0);
-			if (Keyboard.getEventKey() == Keyboard.KEY_Q) GL11.glTranslatef(0, 0, 0.2f);
-			if (Keyboard.getEventKey() == Keyboard.KEY_A) GL11.glTranslatef(0, 0, -0.2f);
+			if (Keyboard.getEventKey() == Keyboard.KEY_SPACE){
+				Game.PLAY = true;
+			}
+			if (Keyboard.getEventKey() == Keyboard.KEY_F) status.moveCamera(new Vector3f(-0.1f, 0, 0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_S) status.moveCamera(new Vector3f(0.1f, 0, 0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_E) status.moveCamera(new Vector3f(0, -0.1f, 0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_D) status.moveCamera(new Vector3f(0, 0.1f, 0));
+			if (Keyboard.getEventKey() == Keyboard.KEY_Q) status.moveCamera(new Vector3f(0, 0, 0.2f));
+			if (Keyboard.getEventKey() == Keyboard.KEY_A) status.moveCamera(new Vector3f(0, 0, -0.2f));
 
-			if (Keyboard.getEventKey() == Keyboard.KEY_I) GL11.glRotatef(10, -0.1f, 0, 0);
-			if (Keyboard.getEventKey() == Keyboard.KEY_K) GL11.glRotatef(10, 0.1f, 0, 0);
-			if (Keyboard.getEventKey() == Keyboard.KEY_L) GL11.glRotatef(10, 0, 0.1f, 0);
-			if (Keyboard.getEventKey() == Keyboard.KEY_J) GL11.glRotatef(10, 0, -0.1f, 0);
-			if (Keyboard.getEventKey() == Keyboard.KEY_U) GL11.glRotatef(10, 0, 0, 0.1f);
-			if (Keyboard.getEventKey() == Keyboard.KEY_O) GL11.glRotatef(10, 0, 0, -0.1f);
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 			if (Keyboard.getEventKeyState()) {
 				if (Keyboard.getEventKey() == Keyboard.KEY_NUMPAD8) {
 					if (!jumpInProgress) {
