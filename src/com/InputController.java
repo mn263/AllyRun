@@ -43,7 +43,14 @@ public class InputController {
 		handleCurrentStatus();
 
 		while (Keyboard.next()) {
-			if(!Game.isPlaying()) {
+			if(!Game.isPlaying() &&
+					Keyboard.getEventKey() != Keyboard.KEY_NUMPAD4 &&
+					Keyboard.getEventKey() != Keyboard.KEY_NUMPAD6 &&
+					Keyboard.getEventKey() != Keyboard.KEY_NUMPAD5 &&
+					Keyboard.getEventKey() != Keyboard.KEY_NUMPAD8 &&
+					Keyboard.getEventKey() != Keyboard.KEY_NUMPAD0 &&
+					Keyboard.getEventKey() != Keyboard.KEY_NUMPAD7 &&
+					Keyboard.getEventKey() != Keyboard.KEY_NUMPAD9) {
 				Game.startPlay();
 				return;
 			}
@@ -92,13 +99,17 @@ public class InputController {
 
 	private static void checkForFood() {
 		if (m.food1.intersects(m.you.boundingBox)) {
-			status.addToScore(5);
+			if(Game.LEVEL.equals("")) status.addToScore(5);
+			else status.addToScore(1);
 		} else if (m.food2.intersects(m.you.boundingBox)) {
-			status.addToScore(10);
+			if(Game.LEVEL.equals("")) status.addToScore(10);
+			else status.addToScore(2);
 		} else if (m.food3.intersects(m.you.boundingBox)) {
-			status.addToScore(20);
+			if(Game.LEVEL.equals("")) status.addToScore(20);
+			else status.addToScore(4);
 		} else {
-			status.addToScore(-5);
+			if(Game.LEVEL.equals("")) status.addToScore(-5);
+			else status.addToScore(-1);
 		}
 	}
 

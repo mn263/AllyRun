@@ -19,14 +19,14 @@ public class ObjUtils {
 	public final String OBJ_PATH = "/home/matt/Programming/Java/CS455/AllyRun/Objects/";
 	private StatusUtils status = StatusUtils.getInstance();
 
-	private Score score0, score1, score2, score3;
+	private Score score0, score1, score2, score3, hScore0, hScore1, hScore2, hScore3;
 
 	public Model infoBox, sky, you, mike;
 	public RepeatingModel bridge, ocean;
 	public FoodModel food1, food2, food3;
 	public FoodModel enemy1, enemy2;
 
-	public Texture newGameTexture, highScoreTexture, gameOverTexture, mikeTexture, blackTexture, redTexture, skyTexture, youTexture, bridgeTexture, oceanTexture,
+	public Texture newGameTexture, highScoreTexture, bonusRoundTexture, gameOverTexture, mikeTexture, blackTexture, redTexture, skyTexture, youTexture, bridgeTexture, oceanTexture,
 			food1Texture, food2Texture, food3Texture, enemy1Texture, enemy2Texture;
 
 	public void loadModels() {
@@ -35,9 +35,7 @@ public class ObjUtils {
 		youTexture = loadTexture("JPG", "character/you.jpg");
 		mikeTexture = loadTexture("JPG", "character/mike.jpg");
 		// scene
-		bridgeTexture = loadTexture("JPG", Game.LEVEL + "scene/pier.jpg");
-		oceanTexture = loadTexture("JPG", Game.LEVEL + "scene/ocean.jpg");
-		skyTexture = loadTexture("JPG", Game.LEVEL + "scene/sky.jpg");
+		loadSceneTextures();
 		// food
 		food1Texture = loadTexture("JPG", "food/food1.jpg");
 		food2Texture = loadTexture("JPG", "food/food2.jpg");
@@ -50,6 +48,7 @@ public class ObjUtils {
 		redTexture = loadTexture("JPG", "misc/red.jpg");
 		gameOverTexture = loadTexture("JPG", "info/gameover.jpg");
 		highScoreTexture = loadTexture("JPG", "info/highscore.jpg");
+		bonusRoundTexture = loadTexture("JPG", "info/bonusround.jpg");
 		newGameTexture = loadTexture("JPG", "info/newgame.jpg");
 
 //		SCENE
@@ -67,6 +66,12 @@ public class ObjUtils {
 		infoBox.setNeededRotation(90f);
 		infoBox.render(true);
 
+	}
+
+	public void loadSceneTextures() {
+		bridgeTexture = loadTexture("JPG", "scene/" + Game.LEVEL + "pier.jpg");
+		oceanTexture = loadTexture("JPG", "scene/" + Game.LEVEL + "ocean.jpg");
+		skyTexture = loadTexture("JPG", "scene/" + Game.LEVEL + "sky.jpg");
 	}
 
 	private Texture loadTexture(String imgType, String key) {
@@ -145,6 +150,27 @@ public class ObjUtils {
 					break;
 			}
 		}
+
+
+
+		strScore = String.valueOf(status.getHighScore());
+		while (strScore.length() < 4) {
+			strScore = '0' + strScore;
+		}
+
+		for (int i = 0; i < strScore.length(); i++) {
+			String digit = String.valueOf(strScore.charAt(3 - i));
+			switch (i) {
+				case 0: hScore0.updateValue(Integer.valueOf(digit));
+					break;
+				case 1: hScore1.updateValue(Integer.valueOf(digit));
+					break;
+				case 2: hScore2.updateValue(Integer.valueOf(digit));
+					break;
+				case 3: hScore3.updateValue(Integer.valueOf(digit));
+					break;
+			}
+		}
 	}
 
 	public void moveScoreLocation(Vector3f change) {
@@ -152,6 +178,10 @@ public class ObjUtils {
 		score1.adjustWithScreen(change);
 		score2.adjustWithScreen(change);
 		score3.adjustWithScreen(change);
+		hScore0.adjustWithScreen(change);
+		hScore1.adjustWithScreen(change);
+		hScore2.adjustWithScreen(change);
+		hScore3.adjustWithScreen(change);
 	}
 
 	public void displayInfoScreen() {
@@ -163,6 +193,8 @@ public class ObjUtils {
 			gameOverTexture.bind();
 		} else if (Game.gameStatus == Game.GAME_STATUS.highscore) {
 			highScoreTexture.bind();
+		} else if (Game.gameStatus == Game.GAME_STATUS.bonus) {
+			bonusRoundTexture.bind();
 		}
 
 		infoBox.render(true);
@@ -188,10 +220,14 @@ public class ObjUtils {
 		enemy2.setNeededRotation(20f);
 
 //		SCORE
-		score0 = new Score(0);
-		score1 = new Score(1);
-		score2 = new Score(2);
-		score3 = new Score(3);
+		score0 = new Score(false, 0);
+		score1 = new Score(false, 1);
+		score2 = new Score(false, 2);
+		score3 = new Score(false, 3);
+		hScore0 = new Score(true, 0);
+		hScore1 = new Score(true, 1);
+		hScore2 = new Score(true, 2);
+		hScore3 = new Score(true, 3);
 
 	}
 }

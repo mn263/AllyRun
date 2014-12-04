@@ -51,7 +51,8 @@ public class StatusUtils {
 	private int distanceScore = 0;
 	private void updateScore() {
 		if(Game.gameTime - distanceScore > 5) {
-			setScore(this.score + 5);
+			if (Game.LEVEL.equals("")) setScore(this.score + 5);
+			else setScore(this.score + 10);
 			distanceScore += 5;
 		}
 	}
@@ -75,10 +76,7 @@ public class StatusUtils {
 	public void reset() {
 		GL11.glTranslatef(-totalCameraMovement.getX(), -totalCameraMovement.getY(), -totalCameraMovement.getZ());
 		m.displayInfoScreen();
-
-
 		ObjUtils.getInstance().loadCharacters();
-
 		totalCameraMovement = new Vector3f(0, 0, 0);
 	}
 }

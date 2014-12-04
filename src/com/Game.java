@@ -16,34 +16,14 @@ import static org.lwjgl.opengl.GL11.*;
 public class Game {
 
 
-//	TODO LIST
-//	TODO: running into something while in the air or holding 'strafe' cause bugs
-
-//	TODO: keep track of highest score so far
-//	TODO: if the ---- score was passed allow for a bonus round
-//	TODO: dont start until space bar hit
-//	TODO: allow for pausing by hitting the space bar
-//	TODO: end game if an enemy was run into
-//	TODO: Create game over screen, with play again option
-//	TODO: create bonus round loading screen
-//	TODO: if you are in a jump, don't allow side movement
-
-//	TODO: implement "first-person" view
-
-//	TODO: create a light source and somehow add shading????
-//	TODO: add option for different difficulty levels (score should go up faster with higher difficulty--game_speed, # of enemies)
-//  TODO: maybe make the cat move around
-
 	public static final String TITLE = "Pier Run!";
-	public static final int FRAMERATE = 60;
+	public static final int FRAMERATE = 100;
 	public static final int CANVAS_WIDTH = 800;  // width of the drawable
 	public static final int CANVAS_HEIGHT = 600; // height of the drawable
 	private static boolean PLAY = false;
-	public static enum GAME_STATUS { newgame, endgame, highscore }
+	public static enum GAME_STATUS { newgame, endgame, highscore, bonus }
 	public static GAME_STATUS gameStatus = GAME_STATUS.newgame;
-//	public static float GAME_SPEED = 0.05f;
 	public static float GAME_SPEED = 0.075f;
-//	public static String LEVEL = "alien_";
 	public static String LEVEL = "";
 
 	public static float gameTime = 0;
@@ -126,13 +106,21 @@ public class Game {
 		if(!isPlaying()) return;
 		endPlay();
 
-		if (LEVEL.equals("") && status.getScore() > 500) {
-//			TODO: load bonus level
+		if (LEVEL.equals("") && status.getScore() > 100) {
+			gameStatus = GAME_STATUS.bonus;
+			status.reset();
+			LEVEL = "alien_";
+			GAME_SPEED = GAME_SPEED * 2;
+			m.loadSceneTextures();
+			return;
 		} else {
+			LEVEL = "";
+			GAME_SPEED = GAME_SPEED / 2;
+			m.loadSceneTextures();
+
 			if (status.getScore() > status.getHighScore()) {
 				gameStatus = GAME_STATUS.highscore;
 				status.setHighScore(status.getScore());
-//				TODO: display high score
 			} else {
 				gameStatus = GAME_STATUS.endgame;
 			}
